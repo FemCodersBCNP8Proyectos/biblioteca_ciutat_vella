@@ -10,7 +10,6 @@ import java.util.List;
 import com.biblioteca.model.Autor;
 import com.config.DBManager;
 
-
 public class AutorRepositoryImpl implements AutorRepository {
 
     @Override
@@ -19,20 +18,18 @@ public class AutorRepositoryImpl implements AutorRepository {
 
         try (Connection conn = DBManager.getConnection();
                 PreparedStatement st = conn.prepareStatement(sql)) {
-
             st.setString(1, autor.getNombre());
             st.executeUpdate();
             System.out.println("Autor guardado correctamente en la base de datos.");
-
         } catch (SQLException e) {
-            throw new RuntimeException ("Error al guardar el autor: " + e.getMessage());
+            throw new RuntimeException("Error al guardar el autor: " + e.getMessage());
         }
     }
 
     @Override
-    public List<Autor> selectAutorAll() {
+    public List<Autor> selectAllAutor() {
         List<Autor> autores = new ArrayList<>();
-        String sql = "SELECT id_autor, nombre FROM autores ORDER BY id_autor"; // ordenamos por Id o podemos tambien hacer la query de ordenar ASC por nombre? Decidir en equipo
+        String sql = "SELECT id_autor, nombre FROM autores ORDER BY nombre ASC";
 
         try (Connection conn = DBManager.getConnection();
                 Statement st = conn.createStatement();
@@ -42,25 +39,43 @@ public class AutorRepositoryImpl implements AutorRepository {
                 autores.add(autor);
             }
         } catch (SQLException e) {
-             throw new RuntimeException ("Error al listar autores: " + e.getMessage());
+            throw new RuntimeException("Error al listar autores: " + e.getMessage());
         }
         return autores;
     }
 
     @Override
-    public Autor selectAutorById(Integer id) {
+    public Autor selectAutorById(Integer id_autor) {
         String sql = "SELECT * FROM autores WHERE id_autor = ?";
 
         try (Connection conn = DBManager.getConnection();
                 PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setInt(1, id);
+            st.setInt(1, id_autor);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
                     return new Autor(rs.getInt("id_autor"), rs.getString("nombre"));
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error al buscar por id: " + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public Autor selectAutorByName(String nombre) {
+        String sql = "SELECT * FROM autores WHERE nombre ILIKE ?";
+
+        try (Connection conn = DBManager.getConnection();
+                PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setString(1, nombre);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return new Autor(rs.getInt("id_autor"), rs.getString("nombre"));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar por nombre: " + e.getMessage());
         }
         return null;
     }
@@ -73,31 +88,50 @@ public class AutorRepositoryImpl implements AutorRepository {
                 PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, autor.getNombre());
             st.setInt(2, autor.getId_autor());
-
-            int filasAfectadas = st.executeUpdate();
-
-            if (filasAfectadas > 0) {
+            int rows = st.executeUpdate();
+            if (rows > 0) {
                 System.out.println("Autor actualizado con éxito.");
+            } else {
+                System.out.println("No se encontró ningún autor con ID: " + autor.getId_autor());
             }
-
         } catch (SQLException e) {
-             throw new RuntimeException ("Error al actualizar: " + e.getMessage());
+            throw new RuntimeException("Error al actualizar: " + e.getMessage());
         }
     }
 
     @Override
-    public void deleteAutor(Integer id) { // decidimos si queremos eliminar por id o por nombre o por ambos y pasamos parametros.
+    public void deleteAutorById(Integer id_autor) { 
         String sql = "DELETE FROM autores WHERE id_autor = ?";
+
         try (Connection conn = DBManager.getConnection();
                 PreparedStatement st = conn.prepareStatement(sql)) {
-
-            st.setInt(1, id);
-            st.executeUpdate();
-            System.out.println("Autor eliminado.");
-
+            st.setInt(1, id_autor);
+            int rows = st.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Autor con ID " + id_autor + " eliminado correctamente.");
+            } else {
+                System.out.println("No se pudo eliminar: No existe ningún autor con ID " + id_autor);
+            }
         } catch (SQLException e) {
-             throw new RuntimeException ("Error al eliminar: " + e.getMessage());
+            throw new RuntimeException("Error al eliminar: " + e.getMessage());
         }
     }
 
+    @Override
+    public void deleteAutorByName(String nombre) {
+        String sql = "DELETE FROM autores WHERE nombre = ?";
+
+        try (Connection conn = DBManager.getConnection();
+                PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setString(1, nombre);
+            int rows = st.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Autor '" + nombre + "' eliminado correctamente.");
+            } else {
+                System.out.println("No se pudo eliminar: El autor '" + nombre + "' no existe.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar: " + e.getMessage());
+        }
+    }
 }

@@ -1,17 +1,27 @@
 package com.biblioteca.model;
 
 public enum Genero {
-    FICCION("Ficción") , 
-    POLICIACA, 
-    ROMANTICA, 
-    FANTASIA, 
-    TERROR, 
-    AVENTURAS, 
-    PSICOLOGIA, 
-    PROGRAMACION, 
-    INFANTIL, 
-    HISTORIA,
+    FICCION("ficcion"), 
+    POLICIACA("policiaca"), 
+    ROMANTICA("romantica"), 
+    FANTASIA("fantasia"), 
+    TERROR("terror"), 
+    AVENTURAS("aventuras"), 
+    PSICOLOGIA("psicologia"), 
+    PROGRAMACION("programacion"), 
+    INFANTIL("infantil"), 
+    HISTORIA("historia");
 
 
-    Genero(String Ficción)
+    private final String generoDB;
+
+    Genero (String value){
+        this.generoDB = value;
+    }
+
+
+    public String getGeneroDb(){
+        return this.generoDB;
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.biblioteca.model;
 
-// import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Libro {
@@ -9,19 +9,31 @@ public class Libro {
     private String titulo;
     private String descripcion;
     private String isbn;
-    // private List<Autor> autores = new ArrayList<>();
-    // private List<Genero> generos = new ArrayList<>();
+
+    private List<Autor> autores;
+    private List<Genero> generos; 
 
 
-    public Libro( String titulo, String descripcion, String isbn, List<Autor> autores, List<Genero> generos) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.isbn = isbn;
-        // this.autores = autores;
-        // this.generos = generos;
+    public Libro() {
+        this.autores = new ArrayList<>();
+        this.generos = new ArrayList<>();
     }
 
 
+    public Libro( String titulo, String descripcion, String isbn) {
+        this();
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.isbn = isbn;
+    }
+
+    public Libro(Integer id_libro, String titulo, String descripcion, String isbn) {
+        this();
+        this.id_libro = id_libro;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.isbn = isbn;
+    }
 
     public Integer getId_libro() {
         return this.id_libro;
@@ -51,21 +63,21 @@ public class Libro {
         this.isbn = isbn;
     }
 
-    // public List<Autor> getAutores() {
-    //     return this.autores;
-    // }
+    public List<Autor> getAutores() {
+        return this.autores;
+    }
 
-    // public void setAutores(List<Autor> autores) {
-    //     this.autores = autores;
-    // }
+    public void setAutores(List<Autor> autores) {
+        this.autores = autores;
+    }
 
-    // public List<Genero> getGeneros() {
-    //     return this.generos;
-    // }
+    public List<Genero> getGeneros() {
+        return this.generos;
+    }
 
-    // public void setGeneros(List<Genero> generos) {
-    //     this.generos = generos;
-    // }
+    public void setGeneros(List<Genero> generos) {
+        this.generos = generos;
+    }
 
 
 }
