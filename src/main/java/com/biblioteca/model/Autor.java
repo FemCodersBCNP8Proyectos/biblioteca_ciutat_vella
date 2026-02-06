@@ -2,22 +2,24 @@ package com.biblioteca.model;
 
 public class Autor {
 
-    private Long id_autor;
+    private Integer id_autor;
     private String nombre;
 
 
+    public Autor() {}
 
     public Autor(String nombre) {
         this.nombre = nombre;
     }
 
-
-    public Long getId_autor() {
-        return this.id_autor;
+    public Autor(Integer id_autor, String nombre) {
+        this.id_autor = id_autor;
+        this.nombre = nombre;
     }
 
-    public void setId_autor(Long id_autor) {
-        this.id_autor = id_autor;
+
+    public Integer getId_autor() {
+        return this.id_autor;
     }
 
     public String getNombre() {

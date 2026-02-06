@@ -1,34 +1,30 @@
 package com.biblioteca.model;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.List;
 
 public class Libro {
 
-    private Long id_libro;
+    private Integer id_libro;
     private String titulo;
     private String descripcion;
     private String isbn;
-    private List<Autor> autores = new ArrayList<>();
-    private List<Categoria> categorias = new ArrayList<>();
+    // private List<Autor> autores = new ArrayList<>();
+    // private List<Genero> generos = new ArrayList<>();
 
 
-    public Libro( String titulo, String descripcion, String isbn, List<Autor> autores, List<Categoria> categorias) {
+    public Libro( String titulo, String descripcion, String isbn, List<Autor> autores, List<Genero> generos) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.isbn = isbn;
-        this.autores = autores;
-        this.categorias = categorias;
+        // this.autores = autores;
+        // this.generos = generos;
     }
 
 
 
-    public Long getId_libro() {
+    public Integer getId_libro() {
         return this.id_libro;
-    }
-
-    public void setId_libro(Long id_libro) {
-        this.id_libro = id_libro;
     }
 
     public String getTitulo() {
@@ -55,22 +51,21 @@ public class Libro {
         this.isbn = isbn;
     }
 
-    public List<Autor> getAutores() {
-        return this.autores;
-    }
+    // public List<Autor> getAutores() {
+    //     return this.autores;
+    // }
 
-    public void setAutores(List<Autor> autores) {
-        this.autores = autores;
-    }
+    // public void setAutores(List<Autor> autores) {
+    //     this.autores = autores;
+    // }
 
-    public List<Categoria> getCategorias() {
-        return this.categorias;
-    }
+    // public List<Genero> getGeneros() {
+    //     return this.generos;
+    // }
 
-    public void setCategorias(List<Categoria> categorias) {
-        this.categorias = categorias;
-    }
+    // public void setGeneros(List<Genero> generos) {
+    //     this.generos = generos;
+    // }
 
 
-   
 }
