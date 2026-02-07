@@ -24,4 +24,17 @@ public enum Genero {
         return this.generoDB;
     }
 
+
+    public static Genero findGenre(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            return null;
+        }
+        for (Genero g : Genero.values()) {
+            if (g.name().equalsIgnoreCase(input.trim())) {
+                return g;
+            }
+        }
+        return null;
+    }
+
 }
