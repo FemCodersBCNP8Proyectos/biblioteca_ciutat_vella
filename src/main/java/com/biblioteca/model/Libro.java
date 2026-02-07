@@ -11,16 +11,14 @@ public class Libro {
     private String isbn;
 
     private List<Autor> autores;
-    private List<Genero> generos; 
-
+    private List<Genero> generos;
 
     public Libro() {
         this.autores = new ArrayList<>();
         this.generos = new ArrayList<>();
     }
 
-
-    public Libro( String titulo, String descripcion, String isbn) {
+    public Libro(String titulo, String descripcion, String isbn) {
         this();
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -79,5 +77,12 @@ public class Libro {
         this.generos = generos;
     }
 
+    public void addAutor(Autor autor) {
+        this.autores.add(autor);
+    }
+
+    public void addGenero(Genero genero) {
+        this.generos.add(genero);
+    }
 
 }
