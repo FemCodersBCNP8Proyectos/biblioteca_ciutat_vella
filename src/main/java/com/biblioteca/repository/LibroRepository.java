@@ -1,16 +1,20 @@
 package com.biblioteca.repository;
 
+// import com.biblioteca.model.Autor;
+import com.biblioteca.model.Genero;
 import com.biblioteca.model.Libro;
+
 import java.util.List;
 
 public interface LibroRepository {
 
     void createLibro(Libro libro);
-    List<Libro> selectAllLibro(); // esto sera el SELECT * FROM libros OJO! enunciado no mostrar descripcion en la info GLOBAL
-    Libro selectLibroById(Integer id_libro); // esto el SELECT FROM libros WHERE id=?
-    List<Libro> selectLibroByTitle(String Titulo); // esto el SELECT FROM libros WHERE titulo=? busqueda flexible mas de un resultado
+    List<Libro> selectAllLibro();
+    Libro selectLibroById(Integer id_libro);
+    List<Libro> selectLibroByTitle(String titulo);
+    List<Libro> selectLibroByAuthor(String nombre);
+    List<Libro> selectLibroByGenre(Genero genero);
     void updateLibro(Libro libro);
+    void deleteLibroByTitle(String titulo);
     void deleteLibroById(Integer id_libro);
-    void deleteLibroByTitle(String Titulo);
-    
 }
