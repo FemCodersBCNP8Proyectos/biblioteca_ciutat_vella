@@ -1,6 +1,6 @@
 package com.biblioteca.repository;
 
-import java.beans.Statement;
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,18 +8,45 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
-
 import com.biblioteca.model.Libro;
 import com.biblioteca.model.Autor;
+import com.biblioteca.model.Colors;
 import com.biblioteca.model.Genero;
 import com.config.DBManager;
+// import com.biblioteca.repository.AutorRepository;
 
 public class LibroRepositoryImp implements LibroRepository {
 
     @Override
     public void createLibro(Libro libro) {
+        String sql = "INSERT INTO libros (titulo, descripcion, isbn) VALUES (?, ?, ?)";
+
+        try (Connection conn = DBManager.getConnection();
+                PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            st.setString(1, libro.getTitulo());
+            st.setString(2, libro.getDescripcion());
+            st.setString(3, libro.getIsbn());
+            st.executeUpdate();
+
+            try (ResultSet rs = st.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int idLibro = rs.getInt(1);
+                    for (Autor a : libro.getAutores()) {
+                        int idAutor = getOrCreateAutor(a);
+                        insertAutorLibro(idLibro, idAutor);
+                    }
+                    for (Genero g : libro.getGeneros()) {
+                        insertLibroGenero(idLibro, g);
+                    }
+                }
+            }
+            System.out.println(Colors.GREEN + "¡Libro y todas sus relaciones guardadas con éxito!" + Colors.RESET);
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    Colors.RED + "Error en la creación completa del libro: " + e.getMessage() + Colors.RESET);
+        }
     }
+
 
     @Override
     public List<Libro> selectAllLibro() {
@@ -32,7 +59,7 @@ public class LibroRepositoryImp implements LibroRepository {
     }
 
     @Override
-    public Libro selectLibroByTitle(String titulo) {
+    public List<Libro> selectLibroByTitle(String titulo) {
         return null;
     }
 
@@ -47,5 +74,45 @@ public class LibroRepositoryImp implements LibroRepository {
     @Override
     public void deleteLibroByTitle(String titulo) {
     }
-    
+
+
+
+    private int getOrCreateAutor(Autor autor) {
+        AutorRepository autorRepository = new AutorRepositoryImp();
+        List<Autor> existsAutor = autorRepository.selectAutorByName(autor.getNombre());
+        if (!existsAutor.isEmpty()) {
+            return existsAutor.get(0).getId_autor();
+        } else {
+            autorRepository.createAutor(autor);
+            List<Autor> newAutor = autorRepository.selectAutorByName(autor.getNombre());
+            return newAutor.get(0).getId_autor();
+        }
+    }
+
+    private void insertAutorLibro( int id_autor, int id_libro) {
+        String sql = "INSERT INTO autor_libro (autor_id, libro_id) VALUES (?, ?)";
+
+        try (Connection conn = DBManager.getConnection();
+                PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, id_autor);
+            st.setInt(2, id_libro);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(Colors.RED + "Error al insertar vinculacion id_libro con id_autor: "
+                    + e.getMessage() + Colors.RESET);
+        }
+    }
+
+    private void insertLibroGenero(int id_libro, Genero genero) {
+        String sql = "INSERT INTO libro_generos (libro_id, genero) VALUES (?, ?::genero)";
+        try (Connection conn = DBManager.getConnection();
+                PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, id_libro);
+            st.setString(2, genero.getGeneroDb());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(Colors.RED + "Error al vincular género ENUM: " + e.getMessage() + Colors.RESET);
+        }
+    }
+
 }

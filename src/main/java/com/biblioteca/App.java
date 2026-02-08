@@ -1,13 +1,36 @@
 package com.biblioteca;
 
-/**
- * Hello world!
- *
- */
+import java.util.ArrayList;
+import java.util.List;
+import com.biblioteca.model.Autor;
+import com.biblioteca.model.Genero;
+import com.biblioteca.model.Libro;
+import com.biblioteca.repository.LibroRepository;
+import com.biblioteca.repository.LibroRepositoryImp;
+
 public class App 
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+
+    // LibroRepository libroRepo = new LibroRepositoryImp();
+
+    // Autor autorPrueba = new Autor("Terry Pratchett");
+    // List<Autor> listaAutores = new ArrayList<>();
+    // listaAutores.add(autorPrueba);
+
+    // List<Genero> listaGeneros = new ArrayList<>();
+    // listaGeneros.add(Genero.FANTASIA); 
+
+    // Libro nuevoLibro = new Libro("El color de la magia", "Un mundo plano sostenido por cuatro elefantes impasibles que se apoyan en la espalda de una tortuga gigante.", "978-84-9759-679-7");
+    // nuevoLibro.setAutores(listaAutores);
+    // nuevoLibro.setGeneros(listaGeneros);
+
+    // try {
+    //     libroRepo.createLibro(nuevoLibro);
+    // } catch (Exception e) {
+    //     System.out.println("La prueba falló por: " + e.getMessage());
+    // }
+
     }
 }

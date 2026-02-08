@@ -11,7 +11,7 @@ import com.biblioteca.model.Autor;
 import com.biblioteca.model.Colors;
 import com.config.DBManager;
 
-public class AutorRepositoryImpl implements AutorRepository {
+public class AutorRepositoryImp implements AutorRepository {
 
     @Override
     public void createAutor(Autor autor) {
@@ -30,7 +30,7 @@ public class AutorRepositoryImpl implements AutorRepository {
     @Override
     public List<Autor> selectAllAutor() {
         List<Autor> autores = new ArrayList<>();
-        String sql = "SELECT id_autor, nombre FROM autores ORDER BY nombre ASC";
+        String sql = "SELECT id_autor, nombre FROM autores ORDER BY nombre ASC"; 
 
         try (Connection conn = DBManager.getConnection();
                 Statement st = conn.createStatement();
@@ -106,6 +106,13 @@ public class AutorRepositoryImpl implements AutorRepository {
 
     @Override
     public void deleteAutorById(Integer id_autor) { 
+        List<String> librosAutor = findAutorLibros(id_autor);
+        if (!librosAutor.isEmpty()){
+            System.out.println(Colors.RED + "ACCIÓN DENEGADA: No se puede eliminar el autor (ID: " + id_autor + ")." + Colors.RESET);
+            System.out.println("Esta autor tiene los siguientes libros vinculados: " + librosAutor);
+            System.out.println("Si estás seguro de querer eliminar el autor y todas sus obras registradas en el inventario selecciona X");
+            return;
+        }
         String sql = "DELETE FROM autores WHERE id_autor = ?";
 
         try (Connection conn = DBManager.getConnection();
@@ -115,28 +122,63 @@ public class AutorRepositoryImpl implements AutorRepository {
             if (rows > 0) {
                 System.out.println(Colors.GREEN + "Autor con ID " + id_autor + " eliminado correctamente."+ Colors.RESET);
             } else {
-                System.out.println(Colors.RED + "No se pudo eliminar: No existe ningún autor con ID " + id_autor + Colors.RESET);
+                System.out.println(Colors.YELLOW + "No se pudo eliminar: No existe ningún autor con ID " + id_autor + Colors.RESET);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(Colors.RED + "Error al eliminar: " + e.getMessage() + Colors.RESET);
+            throw new RuntimeException(Colors.RED + "Error al ejecutar el borrado: " + e.getMessage() + Colors.RESET);
         }
     }
 
     @Override
     public void deleteAutorByName(String nombre) {
-        String sql = "DELETE FROM autores WHERE nombre = ?";
+        String sql = "SELECT id_autor FROM autores WHERE nombre = ?";
+        Integer idAutor = null;
 
         try (Connection conn = DBManager.getConnection();
                 PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, nombre);
-            int rows = st.executeUpdate();
-            if (rows > 0) {
-                System.out.println(Colors.GREEN + "Autor '" + nombre + "' eliminado correctamente." + Colors.RESET);
-            } else {
-                System.out.println(Colors.RED + "No se pudo eliminar: El autor '" + nombre + "' no existe." + Colors.RESET);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()){
+                idAutor = rs.getInt("id_autor");
+            }else{
+                System.out.println(Colors.RED + "El autor '" + nombre + "' no existe." + Colors.RESET);
+                return;
+            }
+            List<String> librosAutor = findAutorLibros(idAutor);
+            if(!librosAutor.isEmpty()){
+                System.out.println(Colors.RED + "BORRADO DENEGADO: " + nombre + " tiene estos libros: " + librosAutor + " vinculados." + Colors.RESET);
+                return;
+            }
+
+            String sqlD = "DELETE FROM autores WHERE nombre = ?";
+
+            try( PreparedStatement stD = conn.prepareStatement(sqlD)){
+                stD.setString(1, nombre);
+                stD.executeUpdate();
+                System.out.println(Colors.GREEN + "Autor '" + nombre + "' eliminado de la Base de Datos." + Colors.RESET);
+            }
+        } catch (SQLException e){
+            throw new RuntimeException(Colors.RED + "Error: " + e.getMessage() + Colors.RESET);
+        }
+    }
+
+
+    private List<String> findAutorLibros(Integer id_autor){
+        List<String> librosAutor = new ArrayList<>();
+        String sql = "SELECT l.titulo FROM libros l " +
+                 "JOIN autor_libro al ON l.id_libro = al.libro_id " +
+                 "WHERE al.autor_id = ?";
+
+        try (Connection conn = DBManager.getConnection();
+                PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, id_autor);
+            ResultSet rs = st.executeQuery();
+            while(rs.next()){
+                librosAutor.add(rs.getString("titulo"));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(Colors.RED + "Error al eliminar: " + e.getMessage() + Colors.RESET);
+            throw new RuntimeException(Colors.RED + "Error al consultar libros del autor: " + e.getMessage() + Colors.RESET);
         }
+        return librosAutor;
     }
 }
