@@ -104,7 +104,7 @@ public class LibroRepositoryImp implements LibroRepository {
     }
 
     @Override
-    public List<Libro> selectLibroByAutor(String nombre){
+    public List<Libro> selectLibroByAuthor(String nombre){
         return null;
     }
 
@@ -140,8 +140,6 @@ public class LibroRepositoryImp implements LibroRepository {
     }
 
     
-
-
 
     private int getOrCreateAutor(Autor autor) {
         AutorRepository autorRepository = new AutorRepositoryImp();
