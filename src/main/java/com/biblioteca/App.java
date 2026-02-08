@@ -1,4 +1,4 @@
-package com.biblioteca;-
+package com.biblioteca;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,24 +13,7 @@ public class App
     public static void main( String[] args )
     {
 
-    LibroRepository libroRepo = new LibroRepositoryImp();
 
-    Autor autorPrueba = new Autor("Anne Rice");
-    List<Autor> listaAutores = new ArrayList<>();
-    listaAutores.add(autorPrueba);
-
-    List<Genero> listaGeneros = new ArrayList<>();
-    listaGeneros.add(Genero.FANTASIA); -
-
-    Libro nuevoLibro = new Libro("La reina de los condenados", "El vampiro Lestat en su epoca RockStar.", "978-84-9759-679-7");
-    nuevoLibro.setAutores(listaAutores);
-    nuevoLibro.setGeneros(listaGeneros);
-
-    try {
-        libroRepo.createLibro(nuevoLibro);
-    } catch (Exception e) {
-        System.out.println("La prueba falló por: " + e.getMessage());
-    }
 
     }
 }
