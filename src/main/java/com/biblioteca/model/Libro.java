@@ -18,6 +18,12 @@ public class Libro {
         this.generos = new ArrayList<>();
     }
 
+    public Libro(Integer id_libro,String titulo, String isbn) {
+        this.id_libro = id_libro;
+        this.titulo = titulo;
+        this.isbn = isbn;
+    }
+
     public Libro(String titulo, String descripcion, String isbn) {
         this();
         this.titulo = titulo;
