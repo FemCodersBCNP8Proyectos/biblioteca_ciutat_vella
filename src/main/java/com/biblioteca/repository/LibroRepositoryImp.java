@@ -1,18 +1,18 @@
 package com.biblioteca.repository;
 
-import java.sql.Statement;
+import com.biblioteca.model.Autor;
+import com.biblioteca.model.Colors;
+import com.biblioteca.model.Genero;
+import com.biblioteca.model.Libro;
+import com.config.DBManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.biblioteca.model.Libro;
-import com.biblioteca.model.Autor;
-import com.biblioteca.model.Colors;
-import com.biblioteca.model.Genero;
-import com.config.DBManager;
 
 public class LibroRepositoryImp implements LibroRepository {
 
@@ -192,8 +192,8 @@ public class LibroRepositoryImp implements LibroRepository {
             st.setInt(1, id_libro);
             int rows = st.executeUpdate();
             if (rows > 0) {
-                System.out.println(Colors.GREEN + "Libro con ID " + id_libro
-                        + " y sus vínculos eliminados correctamente." + Colors.RESET);
+                    System.out.println(Colors.GREEN + "Libro con ID " + id_libro
+                            + " y sus vínculos eliminados correctamente." + Colors.RESET);
             } else {
                 System.out.println(Colors.YELLOW + "No se encontró ningún libro con el ID: " + id_libro + Colors.RESET);
             }
