@@ -19,6 +19,7 @@ public class Libro {
     }
 
     public Libro(Integer id_libro,String titulo, String isbn) {
+        this();
         this.id_libro = id_libro;
         this.titulo = titulo;
         this.isbn = isbn;

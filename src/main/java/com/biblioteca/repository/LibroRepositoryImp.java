@@ -13,7 +13,6 @@ import com.biblioteca.model.Autor;
 import com.biblioteca.model.Colors;
 import com.biblioteca.model.Genero;
 import com.config.DBManager;
-// import com.biblioteca.repository.AutorRepository;
 
 public class LibroRepositoryImp implements LibroRepository {
 
@@ -33,7 +32,7 @@ public class LibroRepositoryImp implements LibroRepository {
                     int idLibro = rs.getInt(1);
                     for (Autor a : libro.getAutores()) {
                         int idAutor = getOrCreateAutor(a);
-                        insertAutorLibro(idLibro, idAutor);
+                        insertAutorLibro(idAutor, idLibro);
                     }
                     for (Genero g : libro.getGeneros()) {
                         insertLibroGenero(idLibro, g);
@@ -47,70 +46,133 @@ public class LibroRepositoryImp implements LibroRepository {
         }
     }
 
-
     @Override
     public List<Libro> selectAllLibro() {
         List<Libro> inventarioLibros = new ArrayList<>();
         String sql = """
-                 SELECT l.id_libro, l.titulo, l.isbn,
-                 STRING_AGG(DISTINCT a.nombre, ', ') AS autores,
-                 STRING_AGG(DISTINCT lg.genero::text, ', ') AS generos
-                 FROM libros l
-                 JOIN autor_libro al ON l.id_libro = al.libro_id
-                 JOIN autores a ON al.autor_id = a.id_autor
-                 JOIN libro_generos lg ON l.id_libro = lg.libro_id
-                 GROUP BY l.id_libro, l.titulo, l.isbn
-                 ORDER BY l.titulo ASC""";
+                SELECT l.id_libro, l.titulo, l.isbn,
+                STRING_AGG(DISTINCT a.nombre, ', ') AS autores,
+                STRING_AGG(DISTINCT lg.genero::text, ', ') AS generos
+                FROM libros l
+                JOIN autor_libro al ON l.id_libro = al.libro_id
+                JOIN autores a ON al.autor_id = a.id_autor
+                JOIN libro_generos lg ON l.id_libro = lg.libro_id
+                GROUP BY l.id_libro, l.titulo, l.isbn
+                ORDER BY l.titulo ASC""";
         try (Connection conn = DBManager.getConnection();
-         Statement st = conn.createStatement();
-         ResultSet rs = st.executeQuery(sql)) {
-            while (rs.next()){
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
                 Libro libro = new Libro(
-                    rs.getInt("id_libro"),
-                    rs.getString("titulo"),
-                    rs.getString("isbn")
-                );
+                        rs.getInt("id_libro"),
+                        rs.getString("titulo"),
+                        rs.getString("isbn"));
 
                 String autores = rs.getString("autores");
-                if(autores!= null){
+                if (autores != null) {
                     String[] arrayAutores = autores.split(", ");
-                    for(String name : arrayAutores){
+                    for (String name : arrayAutores) {
                         libro.addAutor(new Autor(name));
                     }
                 }
                 String generos = rs.getString("generos");
                 if (generos != null) {
                     String[] arrayGeneros = generos.split(", ");
-                    for(String genero : arrayGeneros) {
-                        libro.addGenero(Genero.findGenre(genero));
+                    for (String genero : arrayGeneros) {
+                        libro.addGenero(Genero.findGenero(genero));
                     }
                 }
-                inventarioLibros.add(libro); 
+                inventarioLibros.add(libro);
             }
         } catch (SQLException e) {
             throw new RuntimeException(Colors.RED + "Error al listar: " + e.getMessage() + Colors.RESET);
         }
-        return inventarioLibros;    
+        return inventarioLibros;
     }
 
     @Override
     public Libro selectLibroById(Integer id_libro) {
+        String sql = "SELECT * FROM libros WHERE id_libro = ?";
+        try (Connection conn = DBManager.getConnection();
+                PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, id_libro);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    Libro libro = new Libro(
+                            rs.getInt("id_libro"),
+                            rs.getString("titulo"),
+                            rs.getString("descripcion"),
+                            rs.getString("isbn"));
+                    fillAutores(libro, conn);
+                    fillGeneros(libro, conn);
+                    return libro;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(Colors.RED + "Error al buscar por ID: " + e.getMessage() + Colors.RESET);
+        }
         return null;
     }
 
     @Override
     public List<Libro> selectLibroByTitle(String titulo) {
-        return null;
+        List<Libro> libros = new ArrayList<>();
+        String sql = "SELECT id_libro FROM libros WHERE titulo ILIKE ?";
+
+        try (Connection conn = DBManager.getConnection();
+                PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setString(1, "%" + titulo.trim() + "%");
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    libros.add(selectLibroById(rs.getInt("id_libro")));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(Colors.RED + "Error en búsqueda por título: " + e.getMessage() + Colors.RESET);
+        }
+        return libros;
     }
 
     @Override
-    public List<Libro> selectLibroByAuthor(String nombre){
-        return null;
+    public List<Libro> selectLibroByAuthor(String nombre) {
+        List<Libro> libros = new ArrayList<>();
+        String sql = """
+                SELECT DISTINCT al.libro_id
+                FROM autor_libro al
+                JOIN autores a ON al.autor_id = a.id_autor
+                WHERE a.nombre ILIKE ?""";
+
+        try (Connection conn = DBManager.getConnection();
+                PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setString(1, "%" + nombre.trim() + "%");
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    libros.add(selectLibroById(rs.getInt("libro_id")));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(Colors.RED + "Error buscando por autor: " + e.getMessage() + Colors.RESET);
+        }
+        return libros;
     }
 
     @Override
-    public List<Libro> selectLibroByGenre(Genero genero){
-        return null;
+    public List<Libro> selectLibroByGenre(Genero genero) {
+        List<Libro> libros = new ArrayList<>();
+        String sql = "SELECT libro_id FROM libro_generos WHERE genero = ?::genero";
+
+        try (Connection conn = DBManager.getConnection();
+                PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setString(1, genero.getGeneroDb());
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    libros.add(selectLibroById(rs.getInt("libro_id")));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(Colors.RED + "Error buscando por género: " + e.getMessage() + Colors.RESET);
+        }
+        return libros;
     }
 
     @Override
@@ -127,19 +189,18 @@ public class LibroRepositoryImp implements LibroRepository {
 
         try (Connection conn = DBManager.getConnection();
                 PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setInt(1,id_libro);
+            st.setInt(1, id_libro);
             int rows = st.executeUpdate();
-            if(rows >0){
-                System.out.println(Colors.GREEN + "Libro con ID " + id_libro + " y sus vínculos eliminados correctamente." + Colors.RESET);
+            if (rows > 0) {
+                System.out.println(Colors.GREEN + "Libro con ID " + id_libro
+                        + " y sus vínculos eliminados correctamente." + Colors.RESET);
             } else {
                 System.out.println(Colors.YELLOW + "No se encontró ningún libro con el ID: " + id_libro + Colors.RESET);
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(Colors.RED + "Error al eliminar el libro: " + e.getMessage() + Colors.RESET);
         }
     }
-
-    
 
     private int getOrCreateAutor(Autor autor) {
         AutorRepository autorRepository = new AutorRepositoryImp();
@@ -153,19 +214,19 @@ public class LibroRepositoryImp implements LibroRepository {
         }
     }
 
-    // private void insertAutorLibro( int autor_id, int libro_id) {
-    //     String sql = "INSERT INTO autor_libro (autor_id, libro_id) VALUES (?, ?)";
+    private void insertAutorLibro(int autor_id, int libro_id) {
+        String sql = "INSERT INTO autor_libro (autor_id, libro_id) VALUES (?, ?)";
 
-    //     try (Connection conn = DBManager.getConnection();
-    //             PreparedStatement st = conn.prepareStatement(sql)) {
-    //         st.setInt(1, autor_id);
-    //         st.setInt(2, libro_id);
-    //         st.executeUpdate();
-    //     } catch (SQLException e) {
-    //         throw new RuntimeException(Colors.RED + "Error al insertar vinculacion id_libro con id_autor: "
-    //                 + e.getMessage() + Colors.RESET);
-    //     }
-    // }
+        try (Connection conn = DBManager.getConnection();
+                PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, autor_id);
+            st.setInt(2, libro_id);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(Colors.RED + "Error al insertar vinculacion id_libro con id_autor: "
+                    + e.getMessage() + Colors.RESET);
+        }
+    }
 
     private void insertLibroGenero(int id_libro, Genero genero) {
         String sql = "INSERT INTO libro_generos (libro_id, genero) VALUES (?, ?::genero)";
@@ -176,6 +237,34 @@ public class LibroRepositoryImp implements LibroRepository {
             st.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(Colors.RED + "Error al vincular género ENUM: " + e.getMessage() + Colors.RESET);
+        }
+    }
+
+    private void fillAutores(Libro libro, Connection conn) throws SQLException {
+        String sql = """
+                SELECT a.id_autor, a.nombre
+                FROM autores a
+                JOIN autor_libro al ON a.id_autor = al.autor_id
+                WHERE al.libro_id = ?""";
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, libro.getId_libro());
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    libro.addAutor(new Autor(rs.getInt("id_autor"), rs.getString("nombre")));
+                }
+            }
+        }
+    }
+
+    private void fillGeneros(Libro libro, Connection conn) throws SQLException {
+        String sql = "SELECT genero FROM libro_generos WHERE libro_id = ?";
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, libro.getId_libro());
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    libro.addGenero(Genero.findGenero(rs.getString("genero")));
+                }
+            }
         }
     }
 

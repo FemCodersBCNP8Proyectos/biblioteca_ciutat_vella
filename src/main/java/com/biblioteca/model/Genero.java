@@ -25,7 +25,7 @@ public enum Genero {
     }
 
 
-    public static Genero findGenre(String input) {
+    public static Genero findGenero(String input) {
         if (input == null || input.trim().isEmpty()) {
             return null;
         }
