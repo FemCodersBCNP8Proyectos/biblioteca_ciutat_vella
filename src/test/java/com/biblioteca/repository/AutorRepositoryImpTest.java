@@ -1,5 +1,6 @@
 package com.biblioteca.repository;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
@@ -13,10 +14,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockedStatic;
+
 
 
 
@@ -66,7 +69,7 @@ public class AutorRepositoryImpTest {
 
   }
 
- /*  @Test 
+    @Test 
 
   public void selectAllAutorSuccessfully () throws SQLException{
 
@@ -86,9 +89,12 @@ public class AutorRepositoryImpTest {
     List<Autor> autores = autorRepository.selectAllAutor();
 
     assertEquals(2, autores.size());
-    assertEquals(0, 0); 
+    assertEquals(Integer.valueOf(1),autores.get(0).getId_autor());
+    assertEquals("Andrew Hunt", autores.get(0).getNombre());
+    assertEquals(Integer.valueOf(2), autores.get(1).getId_autor());
+    assertEquals("Dale Carnegie", autores.get(1).getNombre());
 
   }
-    */
-  
+    
 }
+  
