@@ -18,7 +18,6 @@ public class BookView {
 
   private Scanner scanner; 
   private LibroController controller; 
-  private boolean hasSeenInventory ; 
 
   public BookView(LibroController controller){
     this.controller = controller;
@@ -29,27 +28,29 @@ public class BookView {
 
     welcomeMessage();
     boolean keepGoing = true; 
-    hasSeenInventory = false;
+    boolean hasSeenInventory = false;
+    boolean hasInteracted = false; 
 
     while(keepGoing){
-      showMainMenu(hasSeenInventory);
+      showMainMenu(hasSeenInventory,hasInteracted);
       int inputMenu = chosenOption();
 
       switch (inputMenu) {
         case 1: showAllBooks(); 
-                hasSeenInventory = true; 
+                hasSeenInventory = true;
+                hasInteracted = true; 
         break;
         case 2: searchBook();
-                hasSeenInventory = false; 
+                hasInteracted = true; 
         break;
         case 3: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Añadir' aún no implementada.\n" + Colors.RESET);
-                hasSeenInventory = false; 
+                hasInteracted = true;
         break;
         case 4: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Editar' aún no implementada.\n" + Colors.RESET);
-                hasSeenInventory = false; 
+                hasInteracted = true;
         break;
         case 5: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Eliminar' aún no implementada.\n" + Colors.RESET);
-                hasSeenInventory = false; 
+                hasInteracted = true; 
         break;
         case 6: {
           keepGoing = false;
@@ -67,8 +68,8 @@ public class BookView {
                 + Colors.RESET);
   }
 
-  private void showMainMenu (boolean hasSeenInventory){
-    String questionMenu = (!hasSeenInventory ) ? "¿Qué quieres hacer hoy?" : "¿Qué quieres hacer ahora?";
+  private void showMainMenu (boolean hasSeenInventory, boolean hasInteracted){
+    String questionMenu = (!hasInteracted ) ? "¿Qué quieres hacer hoy?" : "¿Qué quieres hacer ahora?";
     System.out.println(Colors.BOLD + "\n" + questionMenu + "\n" + Colors.RESET);
 
     if (!hasSeenInventory) {  
