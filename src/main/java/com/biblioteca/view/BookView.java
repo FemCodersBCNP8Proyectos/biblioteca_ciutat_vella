@@ -25,27 +25,27 @@ public class BookView {
 
     welcomeMessage();
     boolean keepGoing = true;
-    int lastInput = 0; 
+    boolean hasSeenInventory = false; 
 
     while(keepGoing){
-      showMainMenu(lastInput);
+      showMainMenu(hasSeenInventory);
       int inputMenu = chosenOption();
 
       switch (inputMenu) {
         case 1: showAllBooks();
-                lastInput = 1; 
+                hasSeenInventory = true; 
         break;
-        case 2: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Buscar' aún no implementada.\n" + Colors.RESET);
-                lastInput = 2; 
+        case 2: searchBook();
+                hasSeenInventory = false; 
         break;
         case 3: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Añadir' aún no implementada.\n" + Colors.RESET);
-                lastInput = 3; 
+                hasSeenInventory = false; 
         break;
         case 4: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Editar' aún no implementada.\n" + Colors.RESET);
-                lastInput = 4; 
+                hasSeenInventory = false; 
         break;
         case 5: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Eliminar' aún no implementada.\n" + Colors.RESET);
-                lastInput = 5; 
+                hasSeenInventory = false; 
         break;
         case 6: {
           keepGoing = false;
@@ -63,24 +63,18 @@ public class BookView {
                 + Colors.RESET);
   }
 
-  private void showMainMenu (int lastInput){
-    String questionMenu = (lastInput == 0 ) ? "¿Qué quieres hacer hoy?" : "¿Qué quieres hacer ahora?";
+  private void showMainMenu (boolean hasSeenInventory){
+    String questionMenu = (!hasSeenInventory ) ? "¿Qué quieres hacer hoy?" : "¿Qué quieres hacer ahora?";
     System.out.println(Colors.BOLD + "\n" + questionMenu + "\n" + Colors.RESET);
 
-    String[] inputs = {
-      "\n[1] 📖  Ver todo el inventario",
-      "\n[2] 🔍  Buscar un libro",
-      "\n[3] ➕  Añadir un nuevo libro",
-      "\n[4] ✏️   Editar un libro",
-      "\n[5] 🗑️   Eliminar un libro",
-    };
-
-    for (int input = 0; input < inputs.length; input++){
-      if(input + 1 != lastInput){
-        System.out.println(inputs[input]);
-      }
+    if (!hasSeenInventory) {
+      System.out.println("[1] 📖 Ver todo el inventario");
     }
-    System.out.println("\n[6] 🚪  Salir");
+    System.out.println("[2] 🔍 Buscar un libro");
+    System.out.println("[3] ➕ Añadir un nuevo libro");
+    System.out.println("[4] ✏️  Editar un libro");
+    System.out.println("[5] 🗑️  Eliminar un libro");
+    System.out.println("[6] 🚪 Salir");
     System.out.print("\n➤ Introduce tu opción (1-6): ");
   }
 
@@ -123,4 +117,39 @@ public class BookView {
         System.out.println("---------------------------------------------------------------------------------------");
         System.out.println(Colors.GREEN + "\n✅ Total de libros: " + inventario.size() + Colors.RESET);
   }
-}
+
+  private void searchBook(){
+    boolean backToMainMenu = false;
+
+    while(!backToMainMenu) {
+      System.out.println(Colors.BOLD + Colors.CYAN + "\n🔍 BUSCAR LIBRO\n" + Colors.RESET);
+      System.out.println("¿Cómo quieres buscar?");
+      System.out.println("[1] Por título");
+      System.out.println("[2] Por autor");
+      System.out.println("[3] Por género");
+      System.out.println("[4] Volver al menú principal");
+      System.out.print("\n➤ Introduce tu opción (1-4): ");
+
+    int inputSubMenu = chosenOption();
+
+    switch (inputSubMenu) {
+        case 1:
+          System.out.println("searchByTitle()"); 
+          break;
+        case 2:
+          System.out.println("searchByAuthor()");
+          break;
+        case 3:
+          System.out.println("searchByGenre()");
+          break;
+        case 4:
+          backToMainMenu = true;
+          break;
+        default:
+          System.out.println(Colors.RED + "\n❌ Opción inválida.\n" + Colors.RESET);
+          break;
+      }
+    }
+  }
+    }
+

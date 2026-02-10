@@ -1,13 +1,12 @@
 package com.biblioteca.controller;
 
-// import java.util.ArrayList;
-// import java.util.List;
-
 import com.biblioteca.model.Autor;
+import com.biblioteca.model.Genero;
 import com.biblioteca.model.Libro;
-// import com.biblioteca.model.Genero;
 import com.biblioteca.repository.AutorRepository;
 import com.biblioteca.repository.LibroRepository;
+import java.util.List;
+
 
 public class LibroController {
 
@@ -28,4 +27,27 @@ public class LibroController {
         libroRepository.createLibro(libro);
     }
 
+    public List<Libro> selectAllLibro() {
+        return libroRepository.selectAllLibro();
+    }
+
+    public Libro selectLibroById(Integer id_libro) {
+        return libroRepository.selectLibroById(id_libro);
+    }
+
+    public List<Libro> selectLibroByTitle(String titulo){
+        return libroRepository.selectLibroByTitle(titulo);
+    }
+
+    public List<Libro> selectLibroByAuthor(String nombre){
+        return libroRepository.selectLibroByAuthor(nombre);
+    }
+
+    public List<Libro> selectLibroByGenre(Genero genero){
+        return libroRepository.selectLibroByGenre(genero);
+    }
+
+    public void deleteLibroById(Integer id_libro){
+        libroRepository.deleteLibroById(id_libro);
+    }
 }
