@@ -34,6 +34,11 @@ public class App {
         l4.setGeneros(List.of(Genero.TERROR));
         saveLibro(libroRepository, l4);
 
+        Libro l5 = new Libro("Lestat el vampiro", "Apasionante biografia que abarca desde el lascivo París del siglo XVIII a la Roma de Augusto y el Egipto satánico de la prehistoria del mundo frenético de las RockStar.", "84-95501-66-X");
+        l5.setAutores(List.of(new Autor("Anne Rice")));
+        l5.setGeneros(List.of(Genero.TERROR));
+        saveLibro(libroRepository, l5);
+
         System.out.println(Colors.BOLD + Colors.CYAN + "\n             GESTION DE INVENTARIO BIBLIOTECA CIUTAT VELLA\n"
                 + Colors.RESET);
         System.out.println(Colors.BOLD + "ID    | TÍTULO                         | AUTOR/ES                  | ISBN"
