@@ -11,10 +11,14 @@ import java.util.Scanner;
 
 
 
+
+
+
 public class BookView {
 
   private Scanner scanner; 
   private LibroController controller; 
+  private boolean hasSeenInventory ; 
 
   public BookView(LibroController controller){
     this.controller = controller;
@@ -24,15 +28,15 @@ public class BookView {
   public void start(){
 
     welcomeMessage();
-    boolean keepGoing = true;
-    boolean hasSeenInventory = false; 
+    boolean keepGoing = true; 
+    hasSeenInventory = false;
 
     while(keepGoing){
       showMainMenu(hasSeenInventory);
       int inputMenu = chosenOption();
 
       switch (inputMenu) {
-        case 1: showAllBooks();
+        case 1: showAllBooks(); 
                 hasSeenInventory = true; 
         break;
         case 2: searchBook();
@@ -67,7 +71,7 @@ public class BookView {
     String questionMenu = (!hasSeenInventory ) ? "¿Qué quieres hacer hoy?" : "¿Qué quieres hacer ahora?";
     System.out.println(Colors.BOLD + "\n" + questionMenu + "\n" + Colors.RESET);
 
-    if (!hasSeenInventory) {
+    if (!hasSeenInventory) {  
       System.out.println("[1] 📖 Ver todo el inventario");
     }
     System.out.println("[2] 🔍 Buscar un libro");
