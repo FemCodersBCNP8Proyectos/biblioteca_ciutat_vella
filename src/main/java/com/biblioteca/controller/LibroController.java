@@ -5,6 +5,8 @@ import com.biblioteca.model.Genero;
 import com.biblioteca.model.Libro;
 import com.biblioteca.repository.AutorRepository;
 import com.biblioteca.repository.LibroRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,35 +21,74 @@ public class LibroController {
         this.libroRepository = libroRepository;
     }
 
+
     public void createAutor(Autor autor){
-        autorRepository.createAutor(autor);
+        try {
+            autorRepository.createAutor(autor);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void createLibro(Libro libro){
-        libroRepository.createLibro(libro);
+        try {
+            libroRepository.createLibro(libro);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public List<Libro> selectAllLibro() {
-        return libroRepository.selectAllLibro();
+        try {
+            return libroRepository.selectAllLibro();
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     public Libro selectLibroById(Integer id_libro) {
-        return libroRepository.selectLibroById(id_libro);
+        try {
+            return libroRepository.selectLibroById(id_libro);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     public List<Libro> selectLibroByTitle(String titulo){
-        return libroRepository.selectLibroByTitle(titulo);
+        try {
+            return libroRepository.selectLibroByTitle(titulo);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     public List<Libro> selectLibroByAuthor(String nombre){
-        return libroRepository.selectLibroByAuthor(nombre);
+        try {
+            return libroRepository.selectLibroByAuthor(nombre);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return new ArrayList<>();
+        }  
     }
 
     public List<Libro> selectLibroByGenre(Genero genero){
-        return libroRepository.selectLibroByGenre(genero);
+        try {
+            return libroRepository.selectLibroByGenre(genero);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     public void deleteLibroById(Integer id_libro){
-        libroRepository.deleteLibroById(id_libro);
+        try {
+            libroRepository.deleteLibroById(id_libro);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
     }
+
 }
