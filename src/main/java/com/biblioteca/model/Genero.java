@@ -10,7 +10,8 @@ public enum Genero {
     PSICOLOGIA("psicologia"), 
     PROGRAMACION("programacion"), 
     INFANTIL("infantil"), 
-    HISTORIA("historia");
+    HISTORIA("historia"),
+    NOVELA("novela");
 
 
     private final String generoDB;
