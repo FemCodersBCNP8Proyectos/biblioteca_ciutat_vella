@@ -8,12 +8,6 @@ import java.util.List;
 import java.util.Scanner;
 
 
-
-
-
-
-
-
 public class BookView {
 
   private Scanner scanner; 
@@ -101,25 +95,30 @@ public class BookView {
   private void showAllBooks(){
     System.out.println(Colors.BOLD + Colors.CYAN + "\n📖      INVENTARIO COMPLETO - BIBLIOTECA CIUTAT VELLA \n"
                 + Colors.RESET);
-    System.out.println(Colors.BOLD + "ID    | TÍTULO                         | AUTOR/ES                  | ISBN"
-                + Colors.RESET);
-        System.out.println("---------------------------------------------------------------------------------------");
+    System.out.println(Colors.BOLD + String.format("%-3s | %-32.32s | %-20.20s | %-12.12s | %-13s", 
+                        "ID", "TÍTULO", "AUTOR/ES", "GÉNERO/S", "ISBN") + Colors.RESET);
+    System.out.println("--------------------------------------------------------------------------------------------------");
 
     List<Libro> inventario = controller.selectAllLibro();
 
             for (Libro libro : inventario) {
             String nombresAutores = "";
             for (Autor autor : libro.getAutores()) {
-                nombresAutores += autor.getNombre() + " ";
+                nombresAutores += autor.getNombre() + ", ";
             }
-
-            System.out.printf("%-5d | %-30.30s | %-25.25s | %-18s %n",
-                    libro.getId_libro(),
-                    libro.getTitulo(),
-                    nombresAutores,
-                    libro.getIsbn());
-        }
-        System.out.println("---------------------------------------------------------------------------------------");
+            if (nombresAutores.endsWith(", ")) nombresAutores = nombresAutores.substring(0, nombresAutores.length() - 2);
+            String generos = "";
+            for (com.biblioteca.model.Genero g : libro.getGeneros()) {
+                generos += g.name() + " ";
+            }
+            System.out.printf("%-3d | %-32.32s | %-20.20s | %-12.12s | %-13s %n",
+                libro.getId_libro(),
+                libro.getTitulo(),
+                nombresAutores,
+                generos,
+                libro.getIsbn());
+    }
+        System.out.println("--------------------------------------------------------------------------------------------------");
         System.out.println(Colors.GREEN + "\n✅ Total de libros: " + inventario.size() + Colors.RESET);
   }
 
