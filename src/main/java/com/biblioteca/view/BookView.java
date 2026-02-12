@@ -32,18 +32,22 @@ public class BookView {
       switch (inputMenu) {
         case 1: showAllBooks(); 
                 hasSeenInventory = true;
-                hasInteracted = true; 
+                hasInteracted = true;
         break;
         case 2: searchBook();
+                hasSeenInventory = false;
                 hasInteracted = true; 
         break;
         case 3: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Añadir' aún no implementada.\n" + Colors.RESET);
+                hasSeenInventory = false;        
                 hasInteracted = true;
         break;
         case 4: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Editar' aún no implementada.\n" + Colors.RESET);
+                hasSeenInventory = false;
                 hasInteracted = true;
         break;
         case 5: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Eliminar' aún no implementada.\n" + Colors.RESET);
+                hasSeenInventory = false;
                 hasInteracted = true; 
         break;
         case 6: {
@@ -53,6 +57,40 @@ public class BookView {
         }
         default: System.out.println(Colors.RED + "\n❌ Opción inválida. Introduce un número del 1 al 6.\n" + Colors.RESET);
         break;
+      }
+    }
+  }
+
+  private void searchBook(){
+    boolean backToMainMenu = false;
+
+    while(!backToMainMenu) {
+      System.out.println(Colors.BOLD + Colors.CYAN + "\n🔍 BUSCAR LIBRO\n" + Colors.RESET);
+      System.out.println("¿Cómo quieres buscar?");
+      System.out.println("[1] Por título");
+      System.out.println("[2] Por autor");
+      System.out.println("[3] Por género");
+      System.out.println("[4] Volver al menú principal");
+      System.out.print("\n➤ Introduce tu opción (1-4): ");
+
+    int inputSubMenu = chosenOption();
+
+    switch (inputSubMenu) {
+        case 1:
+          System.out.println("searchByTitle()"); 
+          break;
+        case 2:
+          System.out.println("searchByAuthor()");
+          break;
+        case 3:
+          System.out.println("searchByGenre()");
+          break;
+        case 4:
+          backToMainMenu = true;
+          break;
+        default:
+          System.out.println(Colors.RED + "\n❌ Opción inválida.\n" + Colors.RESET);
+          break;
       }
     }
   }
@@ -122,38 +160,6 @@ public class BookView {
         System.out.println(Colors.GREEN + "\n✅ Total de libros: " + inventario.size() + Colors.RESET);
   }
 
-  private void searchBook(){
-    boolean backToMainMenu = false;
-
-    while(!backToMainMenu) {
-      System.out.println(Colors.BOLD + Colors.CYAN + "\n🔍 BUSCAR LIBRO\n" + Colors.RESET);
-      System.out.println("¿Cómo quieres buscar?");
-      System.out.println("[1] Por título");
-      System.out.println("[2] Por autor");
-      System.out.println("[3] Por género");
-      System.out.println("[4] Volver al menú principal");
-      System.out.print("\n➤ Introduce tu opción (1-4): ");
-
-    int inputSubMenu = chosenOption();
-
-    switch (inputSubMenu) {
-        case 1:
-          System.out.println("searchByTitle()"); 
-          break;
-        case 2:
-          System.out.println("searchByAuthor()");
-          break;
-        case 3:
-          System.out.println("searchByGenre()");
-          break;
-        case 4:
-          backToMainMenu = true;
-          break;
-        default:
-          System.out.println(Colors.RED + "\n❌ Opción inválida.\n" + Colors.RESET);
-          break;
-      }
-    }
-  }
+  
     }
 
