@@ -65,6 +65,10 @@ El proyecto implementa una arquitectura MVC (Model-View-Controller) con el patr�
  ┃ ┃ ┃ ┃ ┗ 📜App.java
  ┃ ┃ ┃ ┗ 📂config
  ┃ ┃ ┃ ┃ ┗ 📜DBManager.java
+ ┣ 📂resources
+ ┃ ┣ 📜FlowChart.mmd
+ ┃ ┣ 📜proyecto_biblioteca_ciutat_vella_3FN.sql
+ ┃ ┗ 📜UserFlow1.mmd
  ┗ 📂test
  ┃ ┗ 📂java
  ┃ ┃ ┗ 📂com
@@ -72,7 +76,7 @@ El proyecto implementa una arquitectura MVC (Model-View-Controller) con el patr�
  ┃ ┃ ┃ ┃ ┣ 📂repository
  ┃ ┃ ┃ ┃ ┃ ┗ 📜AutorRepositoryImpTest.java
  ┃ ┃ ┃ ┃ ┗ 📜AppTest.java
-.env
+🔒.env
 .gitignore
 pom.xml
 README.md
