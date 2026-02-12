@@ -65,6 +65,10 @@ El proyecto implementa una arquitectura MVC (Model-View-Controller) con el patr�
  ┃ ┃ ┃ ┃ ┣ 📂repository
  ┃ ┃ ┃ ┃ ┃ ┗ 📜AutorRepositoryImpTest.java
  ┃ ┃ ┃ ┃ ┗ 📜AppTest.java
+.env
+.gitignore
+pom.xml
+README.md
 ```
 
 ## Modelo de Base de Datos
