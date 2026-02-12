@@ -7,66 +7,71 @@ import com.biblioteca.model.Libro;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class BookView {
 
-  private Scanner scanner; 
-  private LibroController controller; 
+  private Scanner scanner;
+  private LibroController controller;
 
-  public BookView(LibroController controller){
+  public BookView(LibroController controller) {
     this.controller = controller;
     this.scanner = new Scanner(System.in);
   }
 
-  public void start(){
+  public void start() {
 
     welcomeMessage();
-    boolean keepGoing = true; 
+    boolean keepGoing = true;
     boolean hasSeenInventory = false;
-    boolean hasInteracted = false; 
+    boolean hasInteracted = false;
 
-    while(keepGoing){
-      showMainMenu(hasSeenInventory,hasInteracted);
+    while (keepGoing) {
+      showMainMenu(hasSeenInventory, hasInteracted);
       int inputMenu = chosenOption();
 
       switch (inputMenu) {
-        case 1: showAllBooks(); 
-                hasSeenInventory = true;
-                hasInteracted = true; 
-        break;
-        case 2: searchBook();
-                hasInteracted = true; 
-        break;
-        case 3: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Añadir' aún no implementada.\n" + Colors.RESET);
-                hasInteracted = true;
-        break;
-        case 4: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Editar' aún no implementada.\n" + Colors.RESET);
-                hasInteracted = true;
-        break;
-        case 5: System.out.println(Colors.YELLOW + "\n⚠️  Función 'Eliminar' aún no implementada.\n" + Colors.RESET);
-                hasInteracted = true; 
-        break;
+        case 1:
+          showAllBooks();
+          hasSeenInventory = true;
+          hasInteracted = true;
+          break;
+        case 2:
+          searchBook();
+          hasInteracted = true;
+          break;
+        case 3:
+          System.out.println(Colors.YELLOW + "\n⚠️  Función 'Añadir' aún no implementada.\n" + Colors.RESET);
+          hasInteracted = true;
+          break;
+        case 4:
+          System.out.println(Colors.YELLOW + "\n⚠️  Función 'Editar' aún no implementada.\n" + Colors.RESET);
+          hasInteracted = true;
+          break;
+        case 5:
+          System.out.println(Colors.YELLOW + "\n⚠️  Función 'Eliminar' aún no implementada.\n" + Colors.RESET);
+          hasInteracted = true;
+          break;
         case 6: {
           keepGoing = false;
           goodbyeMessage();
           break;
         }
-        default: System.out.println(Colors.RED + "\n❌ Opción inválida. Introduce un número del 1 al 6.\n" + Colors.RESET);
-        break;
+        default:
+          System.out.println(Colors.RED + "\n❌ Opción inválida. Introduce un número del 1 al 6.\n" + Colors.RESET);
+          break;
       }
     }
   }
 
-  private void welcomeMessage () {
+  private void welcomeMessage() {
     System.out.println(Colors.BOLD + Colors.CYAN + "\n📚      BIENVENIDO/A A BIBLIOTECA CIUTAT VELLA \n"
-                + Colors.RESET);
+        + Colors.RESET);
   }
 
-  private void showMainMenu (boolean hasSeenInventory, boolean hasInteracted){
-    String questionMenu = (!hasInteracted ) ? "¿Qué quieres hacer hoy?" : "¿Qué quieres hacer ahora?";
+  private void showMainMenu(boolean hasSeenInventory, boolean hasInteracted) {
+    String questionMenu = (!hasInteracted) ? "¿Qué quieres hacer hoy?" : "¿Qué quieres hacer ahora?";
     System.out.println(Colors.BOLD + "\n" + questionMenu + "\n" + Colors.RESET);
 
-    if (!hasSeenInventory) {  
+    if (!hasSeenInventory) {
       System.out.println("[1] 📖 Ver todo el inventario");
     }
     System.out.println("[2] 🔍 Buscar un libro");
@@ -77,8 +82,7 @@ public class BookView {
     System.out.print("\n➤ Introduce tu opción (1-6): ");
   }
 
-
-  private int chosenOption (){
+  private int chosenOption() {
     String inputMenu = scanner.nextLine().trim();
     try {
       return Integer.parseInt(inputMenu);
@@ -86,46 +90,50 @@ public class BookView {
       return -1;
     }
   }
-  private void goodbyeMessage(){
+
+  private void goodbyeMessage() {
     System.out.println(Colors.BOLD + Colors.CYAN + "\n👋 ¡HASTA PRONTO!\n"
-                + Colors.RESET);
+        + Colors.RESET);
     scanner.close();
   }
 
-  private void showAllBooks(){
+  private void showAllBooks() {
     System.out.println(Colors.BOLD + Colors.CYAN + "\n📖      INVENTARIO COMPLETO - BIBLIOTECA CIUTAT VELLA \n"
-                + Colors.RESET);
-    System.out.println(Colors.BOLD + String.format("%-3s | %-32.32s | %-20.20s | %-12.12s | %-13s", 
-                        "ID", "TÍTULO", "AUTOR/ES", "GÉNERO/S", "ISBN") + Colors.RESET);
-    System.out.println("--------------------------------------------------------------------------------------------------");
+        + Colors.RESET);
+    System.out.println(Colors.BOLD + String.format("%-3s | %-32.32s | %-20.20s | %-12.12s | %-13s",
+        "ID", "TÍTULO", "AUTOR/ES", "GÉNERO/S", "ISBN") + Colors.RESET);
+    System.out
+        .println("--------------------------------------------------------------------------------------------------");
 
     List<Libro> inventario = controller.selectAllLibro();
 
-            for (Libro libro : inventario) {
-            String nombresAutores = "";
-            for (Autor autor : libro.getAutores()) {
-                nombresAutores += autor.getNombre() + ", ";
-            }
-            if (nombresAutores.endsWith(", ")) nombresAutores = nombresAutores.substring(0, nombresAutores.length() - 2);
-            String generos = "";
-            for (com.biblioteca.model.Genero g : libro.getGeneros()) {
-                generos += g.name() + " ";
-            }
-            System.out.printf("%-3d | %-32.32s | %-20.20s | %-12.12s | %-13s %n",
-                libro.getId_libro(),
-                libro.getTitulo(),
-                nombresAutores,
-                generos,
-                libro.getIsbn());
+    for (Libro libro : inventario) {
+      String nombresAutores = "";
+      for (Autor autor : libro.getAutores()) {
+        nombresAutores += autor.getNombre() + ", ";
+      }
+      if (nombresAutores.endsWith(", "))
+        nombresAutores = nombresAutores.substring(0, nombresAutores.length() - 2);
+      String generos = "";
+      for (com.biblioteca.model.Genero g : libro.getGeneros()) {
+        generos += g.name() + " ";
+      }
+      System.out.printf("%-3d | %-32.32s | %-20.20s | %-12.12s | %-13s %n",
+          libro.getId_libro(),
+          libro.getTitulo(),
+          nombresAutores,
+          generos,
+          libro.getIsbn());
     }
-        System.out.println("--------------------------------------------------------------------------------------------------");
-        System.out.println(Colors.GREEN + "\n✅ Total de libros: " + inventario.size() + Colors.RESET);
+    System.out
+        .println("--------------------------------------------------------------------------------------------------");
+    System.out.println(Colors.GREEN + "\n✅ Total de libros: " + inventario.size() + Colors.RESET);
   }
 
-  private void searchBook(){
+  private void searchBook() {
     boolean backToMainMenu = false;
 
-    while(!backToMainMenu) {
+    while (!backToMainMenu) {
       System.out.println(Colors.BOLD + Colors.CYAN + "\n🔍 BUSCAR LIBRO\n" + Colors.RESET);
       System.out.println("¿Cómo quieres buscar?");
       System.out.println("[1] Por título");
@@ -134,11 +142,11 @@ public class BookView {
       System.out.println("[4] Volver al menú principal");
       System.out.print("\n➤ Introduce tu opción (1-4): ");
 
-    int inputSubMenu = chosenOption();
+      int inputSubMenu = chosenOption();
 
-    switch (inputSubMenu) {
+      switch (inputSubMenu) {
         case 1:
-          System.out.println("searchByTitle()"); 
+          System.out.println("searchByTitle()");
           break;
         case 2:
           System.out.println("searchByAuthor()");
@@ -155,5 +163,30 @@ public class BookView {
       }
     }
   }
-    }
 
+  private void searchByTitle(){
+    System.out.println("Introduce el titulo");
+    String title = scanner.nextLine().trim();
+  
+  while(title.isEmpty()){
+      System.out.println(Colors.RED + "\n❌ El titulo no puede estar vacio.\n" + Colors.RESET);
+        System.out.println("Introduce el titulo");
+        title = scanner.nextLine().trim(); 
+
+         List<Libro> libros = controller.selectLibroByTitle(title);
+
+         if(llibros.isEmpty()) {
+          System.out.println(Colors.YELLOW + "\n⚠️  No se encontro ningun libro .\n" + Colors.RESET);
+         }  else{
+          System.out.println(Colors.GREEN + "\n✅ Se han encontrado  " + libros + Colors.RESET);
+         }
+         
+  
+
+        
+        
+
+      
+
+  }
+}

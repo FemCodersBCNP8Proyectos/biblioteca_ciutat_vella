@@ -45,7 +45,7 @@ public class LibroController {
             return new ArrayList<>();
         }
     }
-
+    
     public Libro selectLibroById(Integer id_libro) {
         try {
             return libroRepository.selectLibroById(id_libro);
