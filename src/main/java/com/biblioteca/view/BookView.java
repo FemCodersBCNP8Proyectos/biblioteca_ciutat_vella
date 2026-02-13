@@ -241,7 +241,7 @@ public class BookView {
     }
 
     private void printBookDetails(Libro libro) {
-        System.out.println(Colors.CYAN + "\n----------------------------------------------------\n" + Colors.RESET);
+        System.out.println(Colors.CYAN + "\n--------------------------------------------------------------------------------------------------\n" + Colors.RESET);
         System.out.println(Colors.BOLD + "TÍTULO:      " + Colors.RESET + Colors.YELLOW + libro.getTitulo() + Colors.RESET);
         String autores = "";
         for (Autor a : libro.getAutores()) {
@@ -257,6 +257,6 @@ public class BookView {
         System.out.println(Colors.BOLD + "GÉNERO/S:    " + Colors.RESET + generos);
         System.out.println(Colors.BOLD + "ISBN:        " + Colors.RESET + libro.getIsbn());
         System.out.println(Colors.BOLD + "DESCRIPCIÓN: " + Colors.RESET + libro.getDescripcion() + Colors.RESET);
-        System.out.println(Colors.CYAN + "\n----------------------------------------------------\n\n" + Colors.RESET);
+        System.out.println(Colors.CYAN + "\n--------------------------------------------------------------------------------------------------\n\n" + Colors.RESET);
     }
 }
