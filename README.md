@@ -1,3 +1,6 @@
+<!-- [MermaidChart: 2e50b154-e043-483d-9fb7-9acc25ba894a] -->
+<!-- [MermaidChart: 6e8637a3-f07f-4fe6-bb3a-e8611d241252] -->
+
 # Biblioteca Ciutat Vella (Java)
 
 ## Descripción del proyecto
@@ -11,6 +14,7 @@ Sistema de gestión de biblioteca desarrollado en Java que permite la administra
 La biblioteca de ciutat vella necesita modernizarse y mantener todos sus libros organizados en un programa web. Un inventario actualizado facilitará la gestión y permitirá prestar mejores servicios.
 
 La administradora necesita:
+
 - Añadir libros al catálogo
 - Actualizar información de libros existentes
 - Eliminar libros del inventario
@@ -20,6 +24,7 @@ La administradora necesita:
 ## Tecnologías y herramientas
 
 ### Tecnologías
+
 - **Java 21** - Lenguaje de programación principal
 - **PostgreSQL** - Base de datos
 - **Maven** - Gestión de dependencias y estructura del proyecto
@@ -27,6 +32,7 @@ La administradora necesita:
 - **Mockito** - Framework para mocking en tests
 
 ### Herramientas
+
 - Visual Studio Code
 - Git & GitHub
 - Jira (Atlassian)
@@ -35,6 +41,7 @@ La administradora necesita:
 ## Arquitectura del proyecto
 
 El proyecto implementa una arquitectura MVC (Model-View-Controller) con el patrón Repository para el acceso a datos:
+
 ```
 📦src
  ┣ 📂main
@@ -76,19 +83,23 @@ README.md
 ### Entidades Principales
 
 **Libros**
+
 - ID (PK)
 - Título
 - Descripción (máx. 200 caracteres)
 - ISBN
 
 **Autores**
+
 - ID (PK)
 - Nombre
 
 **Géneros Literarios**
+
 - ENUM Género ('ficción', 'policíaca', 'romántica', 'fantasía', 'terror', 'psicología', 'programación', 'infantil', 'historia')
 
 ### Relaciones
+
 - Un libro puede tener varios autores (relación N:M)
 - Un libro puede pertenecer a varios géneros (relación N:M)
 
@@ -97,6 +108,7 @@ La base de datos está normalizada siguiendo la 3FN para evitar redundancia y ma
 ## Requisitos Funcionales Cumplidos
 
 El sistema permite al usuario:
+
 - **Ver todos los libros** - Lista completa del catálogo (sin descripción)
 - **Añadir un libro** - Registrar nuevo libro con todos sus datos
 - **Editar un libro** - Actualizar información existente
@@ -108,6 +120,7 @@ El sistema permite al usuario:
 ## Instalación y Configuración
 
 ### Prerrequisitos
+
 - Java JDK 21 o superior
 - PostgreSQL instalado y configurado 42.7.9
 - Maven 21
@@ -116,6 +129,7 @@ El sistema permite al usuario:
 - DOTENV 3.2.0
 
 ### Guía de instalación
+
 ```bash
 git clone https://github.com/FemCodersBCNP8Proyectos/biblioteca_ciutat_vella.git
 ```
@@ -139,13 +153,14 @@ Auto repository
 Este proyecto ha sido desarrollado utilizando metodologías ágiles.
 
 ### Metodología
+
 - **Scrum** - Sprints semanales
 - **MOB** - Programación en grupo
 - **Code Review** - Revisión de código entre compañeras
 
 ### Proyecto desarrollado en equipo por:
+
 - **Sukaina Hadani** — https://github.com/sukisu91-alt
 - **Charlotte Doulcet** — https://github.com/Charlottedoulcet
 - **Guadalupe Peña** — https://github.com/AdaXana
 - **Jennifer Ceballos** — https://github.com/JenCeballos
-

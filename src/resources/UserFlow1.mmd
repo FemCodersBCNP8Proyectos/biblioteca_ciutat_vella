@@ -1,0 +1,198 @@
+---
+id: 6e8637a3-f07f-4fe6-bb3a-e8611d241252
+---
+flowchart TD
+    Start([Usuario abre<br/>la terminal]) --> Welcome["Pantalla de Bienvenida:<br/>📚 BIENVENIDO/A A<br/>BIBLIOTECA CIUTAT VELLA<br/>¿Qué quieres hacer hoy?"]
+    
+    Welcome --> MainMenu["Ve MENÚ PRINCIPAL:<br/>1. Ver todo el inventario<br/>2. Buscar un libro<br/>3. Añadir un nuevo libro<br/>4. Editar un libro<br/>5. Eliminar un libro<br/>6. Salir<br/><br/>Introduce tu opción 1-6"]
+    
+    MainMenu --> UserInput1{Usuario<br/>escribe número}
+    
+    %% ==================== OPCIÓN 1: VER INVENTARIO ====================
+    UserInput1 -->|"1"| Screen1["Ve PANTALLA:<br/>📖 INVENTARIO COMPLETO<br/>X libros registrados<br/><br/>Tabla con columnas:<br/>ID | Título | Autor | ISBN | Género<br/>SIN descripción"]
+    
+    Screen1 --> SubMenu1["Ve SUBMENÚ:<br/>1. Volver al menú principal<br/>2. Buscar un libro específico<br/>3. Añadir nuevo libro<br/>4. Editar un libro<br/>5. Eliminar un libro<br/><br/>Introduce tu opción"]
+    
+    SubMenu1 --> UserInput1_1{Usuario<br/>escribe}
+    UserInput1_1 -->|"1"| MainMenu
+    UserInput1_1 -->|"2"| SearchMenu
+    UserInput1_1 -->|"3"| AddMenu
+    UserInput1_1 -->|"4"| EditMenu
+    UserInput1_1 -->|"5"| DeleteMenu
+    
+    %% ==================== OPCIÓN 2: BUSCAR LIBRO ====================
+    UserInput1 -->|"2"| SearchMenu["Ve MENÚ BUSCAR:<br/>🔍 BUSCAR LIBRO<br/><br/>Buscar por:<br/>1. Título<br/>2. Autor<br/>3. Género literario<br/>4. Volver al menú principal<br/><br/>Introduce tu opción"]
+    
+    SearchMenu --> UserInput2{Usuario<br/>escribe}
+    UserInput2 -->|"4"| MainMenu
+    
+    %% Búsqueda por TÍTULO
+    UserInput2 -->|"1"| SearchTitle["Ve PANTALLA:<br/>🔍 BUSCAR POR TÍTULO<br/><br/>Introduce el título a buscar:"]
+    SearchTitle --> TypeTitle[Usuario escribe título]
+    TypeTitle --> ResultTitle{Sistema<br/>muestra}
+    
+    ResultTitle -->|Encontrado| ScreenFound["Ve PANTALLA:<br/>✅ LIBRO ENCONTRADO<br/><br/>ID: XXX<br/>Título: XXXXX<br/>Autor: XXXXX<br/>Descripción: XXXXX<br/>ISBN: XXXXX<br/>Género: XXXXX"]
+    
+    ResultTitle -->|No encontrado| ScreenNotFound["Ve PANTALLA:<br/>❌ NO SE ENCONTRÓ EL LIBRO<br/><br/>No hay registros<br/>con ese título"]
+    
+    ScreenFound --> SubMenuFound["Ve SUBMENÚ:<br/>1. Editar este libro<br/>2. Eliminar este libro<br/>3. Buscar otro libro<br/>4. Volver al menú principal<br/><br/>Introduce tu opción"]
+    
+    SubMenuFound --> UserInputFound{Usuario<br/>escribe}
+    UserInputFound -->|"1"| EditMenu
+    UserInputFound -->|"2"| DeleteMenu
+    UserInputFound -->|"3"| SearchMenu
+    UserInputFound -->|"4"| MainMenu
+    
+    ScreenNotFound --> SubMenuNotFound["Ve SUBMENÚ:<br/>1. Intentar otra búsqueda<br/>2. Añadir nuevo libro<br/>3. Volver al menú principal<br/><br/>Introduce tu opción"]
+    
+    SubMenuNotFound --> UserInputNotFound{Usuario<br/>escribe}
+    UserInputNotFound -->|"1"| SearchMenu
+    UserInputNotFound -->|"2"| AddMenu
+    UserInputNotFound -->|"3"| MainMenu
+    
+    %% Búsqueda por AUTOR
+    UserInput2 -->|"2"| SearchAuthor["Ve PANTALLA:<br/>🔍 BUSCAR POR AUTOR<br/><br/>Introduce el autor a buscar:"]
+    SearchAuthor --> TypeAuthor[Usuario escribe autor]
+    TypeAuthor --> ResultAuthor{Sistema<br/>muestra}
+    ResultAuthor -->|Encontrado| ScreenFound
+    ResultAuthor -->|No encontrado| ScreenNotFound
+    
+    %% Búsqueda por GÉNERO
+    UserInput2 -->|"3"| SearchGenre["Ve PANTALLA:<br/>🔍 BUSCAR POR GÉNERO<br/><br/>Introduce el género a buscar:"]
+    SearchGenre --> TypeGenre[Usuario escribe género]
+    TypeGenre --> ResultGenre{Sistema<br/>muestra}
+    
+    ResultGenre -->|Encontrados| ScreenGenre["Ve PANTALLA:<br/>📚 LIBROS DE 'GÉNERO'<br/>X encontrados<br/><br/>Tabla con columnas:<br/>ID | Título | Autor | ISBN<br/>SIN descripción"]
+    
+    ResultGenre -->|No encontrados| ScreenNotFound
+    
+    ScreenGenre --> SubMenuGenre["Ve SUBMENÚ:<br/>1. Ver detalles de un libro<br/>   introduce ID<br/>2. Buscar otro género<br/>3. Volver al menú principal<br/><br/>Introduce tu opción"]
+    
+    SubMenuGenre --> UserInputGenre{Usuario<br/>escribe}
+    UserInputGenre -->|"1"| TypeID["Ve: Introduce el ID:"]
+    TypeID --> UserTypeID[Usuario escribe ID]
+    UserTypeID --> ScreenFound
+    UserInputGenre -->|"2"| SearchMenu
+    UserInputGenre -->|"3"| MainMenu
+    
+    %% ==================== OPCIÓN 3: AÑADIR LIBRO ====================
+    UserInput1 -->|"3"| AddMenu
+    
+    AddMenu["Ve PANTALLA:<br/>➕ AÑADIR NUEVO LIBRO<br/><br/>Paso 1/5:<br/>Introduce el título:"] --> AddStep1[Usuario escribe título]
+    
+    AddStep1 --> Screen2["Ve confirmación: ✓<br/><br/>Paso 2/5:<br/>Introduce el/los autores<br/>separados por coma:"]
+    Screen2 --> AddStep2[Usuario escribe autores]
+    
+    AddStep2 --> Screen3["Ve confirmación: ✓<br/><br/>Paso 3/5:<br/>Introduce la descripción<br/>máximo 200 caracteres<br/><br/>Caracteres restantes: 200"]
+    Screen3 --> AddStep3[Usuario escribe descripción]
+    
+    AddStep3 --> Screen4["Ve confirmación: ✓<br/><br/>Paso 4/5:<br/>Introduce el código ISBN:"]
+    Screen4 --> AddStep4[Usuario escribe ISBN]
+    
+    AddStep4 --> Screen5["Ve confirmación: ✓<br/><br/>Paso 5/5:<br/>Introduce el/los géneros<br/>separados por coma:"]
+    Screen5 --> AddStep5[Usuario escribe géneros]
+    
+    AddStep5 --> ScreenResume["Ve PANTALLA:<br/>📋 CONFIRMAR DATOS<br/><br/>Título: XXXXX<br/>Autores: XXXXX<br/>Descripción: XXXXX<br/>ISBN: XXXXX<br/>Géneros: XXXXX<br/><br/>1. Confirmar y guardar<br/>2. Cancelar y volver al menú<br/><br/>Introduce tu opción"]
+    
+    ScreenResume --> UserInputConfirm{Usuario<br/>escribe}
+    UserInputConfirm -->|"2"| MainMenu
+    UserInputConfirm -->|"1"| ScreenSuccess["Ve PANTALLA:<br/>✅ LIBRO REGISTRADO<br/>CORRECTAMENTE<br/><br/>El libro ha sido añadido<br/>al inventario<br/>ID asignado: XXX"]
+    
+    ScreenSuccess --> SubMenuSuccess["Ve SUBMENÚ:<br/>1. Añadir otro libro<br/>2. Ver inventario completo<br/>3. Volver al menú principal<br/><br/>Introduce tu opción"]
+    
+    SubMenuSuccess --> UserInputSuccess{Usuario<br/>escribe}
+    UserInputSuccess -->|"1"| AddMenu
+    UserInputSuccess -->|"2"| Screen1
+    UserInputSuccess -->|"3"| MainMenu
+    
+    %% ==================== OPCIÓN 4: EDITAR LIBRO ====================
+    UserInput1 -->|"4"| EditMenu["Ve PANTALLA:<br/>✏️ EDITAR LIBRO<br/><br/>¿Cómo quieres buscar<br/>el libro a editar?<br/>1. Por ID<br/>2. Por título<br/>3. Volver al menú principal<br/><br/>Introduce tu opción"]
+    
+    EditMenu --> UserInputEdit{Usuario<br/>escribe}
+    UserInputEdit -->|"3"| MainMenu
+    UserInputEdit -->|"1"| EditSearchID["Ve: Introduce el ID:"]
+    UserInputEdit -->|"2"| EditSearchTitle["Ve: Introduce el título:"]
+    
+    EditSearchID --> UserTypeEditID[Usuario escribe ID]
+    EditSearchTitle --> UserTypeEditTitle[Usuario escribe título]
+    
+    UserTypeEditID --> ScreenEditBook["Ve PANTALLA:<br/>✏️ EDITAR LIBRO - ID: XXX<br/><br/>Datos actuales:<br/>Título: XXXXX<br/>Autores: XXXXX<br/>Descripción: XXXXX<br/>ISBN: XXXXX<br/>Géneros: XXXXX"]
+    UserTypeEditTitle --> ScreenEditBook
+    
+    ScreenEditBook --> EditFieldMenu["Ve MENÚ:<br/>¿Qué campo deseas editar?<br/>1. Título<br/>2. Autores<br/>3. Descripción<br/>4. ISBN<br/>5. Géneros<br/>6. Guardar cambios<br/>7. Cancelar y volver<br/><br/>Introduce tu opción"]
+    
+    EditFieldMenu --> UserInputField{Usuario<br/>escribe}
+    UserInputField -->|"7"| MainMenu
+    UserInputField -->|"6"| ScreenEditSuccess["Ve PANTALLA:<br/>✅ CAMBIOS GUARDADOS<br/>CORRECTAMENTE<br/><br/>El libro ha sido actualizado"]
+    
+    UserInputField -->|"1"| EditTitle["Ve: Introduce nuevo título:"]
+    UserInputField -->|"2"| EditAuthor["Ve: Introduce nuevos autores:"]
+    UserInputField -->|"3"| EditDesc["Ve: Introduce nueva descripción<br/>máximo 200 caracteres:"]
+    UserInputField -->|"4"| EditISBN["Ve: Introduce nuevo ISBN:"]
+    UserInputField -->|"5"| EditGenre["Ve: Introduce nuevos géneros:"]
+    
+    EditTitle --> UserEditTitle[Usuario escribe]
+    EditAuthor --> UserEditAuthor[Usuario escribe]
+    EditDesc --> UserEditDesc[Usuario escribe]
+    EditISBN --> UserEditISBN[Usuario escribe]
+    EditGenre --> UserEditGenre[Usuario escribe]
+    
+    UserEditTitle --> EditFieldMenu
+    UserEditAuthor --> EditFieldMenu
+    UserEditDesc --> EditFieldMenu
+    UserEditISBN --> EditFieldMenu
+    UserEditGenre --> EditFieldMenu
+    
+    ScreenEditSuccess --> SubMenuEditSuccess["Ve SUBMENÚ:<br/>1. Editar otro libro<br/>2. Ver el libro actualizado<br/>3. Volver al menú principal<br/><br/>Introduce tu opción"]
+    
+    SubMenuEditSuccess --> UserInputEditSuccess{Usuario<br/>escribe}
+    UserInputEditSuccess -->|"1"| EditMenu
+    UserInputEditSuccess -->|"2"| ScreenFound
+    UserInputEditSuccess -->|"3"| MainMenu
+    
+    %% ==================== OPCIÓN 5: ELIMINAR LIBRO ====================
+    UserInput1 -->|"5"| DeleteMenu["Ve PANTALLA:<br/>🗑️ ELIMINAR LIBRO<br/><br/>¿Cómo quieres buscar<br/>el libro a eliminar?<br/>1. Por ID<br/>2. Por título<br/>3. Volver al menú principal<br/><br/>Introduce tu opción"]
+    
+    DeleteMenu --> UserInputDelete{Usuario<br/>escribe}
+    UserInputDelete -->|"3"| MainMenu
+    UserInputDelete -->|"1"| DeleteSearchID["Ve: Introduce el ID:"]
+    UserInputDelete -->|"2"| DeleteSearchTitle["Ve: Introduce el título:"]
+    
+    DeleteSearchID --> UserTypeDeleteID[Usuario escribe ID]
+    DeleteSearchTitle --> UserTypeDeleteTitle[Usuario escribe título]
+    
+    UserTypeDeleteID --> ScreenDeleteBook["Ve PANTALLA:<br/>⚠️ CONFIRMAR ELIMINACIÓN<br/><br/>Vas a eliminar el siguiente libro:<br/><br/>ID: XXX<br/>Título: XXXXX<br/>Autores: XXXXX<br/><br/>⚠️ Esta acción NO se puede<br/>deshacer"]
+    UserTypeDeleteTitle --> ScreenDeleteBook
+    
+    ScreenDeleteBook --> DeleteConfirm["Ve MENÚ:<br/>1. SÍ eliminar definitivamente<br/>2. NO cancelar y volver<br/><br/>Introduce tu opción"]
+    
+    DeleteConfirm --> UserInputDeleteConfirm{Usuario<br/>escribe}
+    UserInputDeleteConfirm -->|"2"| MainMenu
+    UserInputDeleteConfirm -->|"1"| ScreenDeleteSuccess["Ve PANTALLA:<br/>✅ LIBRO ELIMINADO<br/>CORRECTAMENTE<br/><br/>El libro ha sido borrado<br/>del inventario"]
+    
+    ScreenDeleteSuccess --> SubMenuDeleteSuccess["Ve SUBMENÚ:<br/>1. Eliminar otro libro<br/>2. Ver inventario actualizado<br/>3. Volver al menú principal<br/><br/>Introduce tu opción"]
+    
+    SubMenuDeleteSuccess --> UserInputDelSuccess{Usuario<br/>escribe}
+    UserInputDelSuccess -->|"1"| DeleteMenu
+    UserInputDelSuccess -->|"2"| Screen1
+    UserInputDelSuccess -->|"3"| MainMenu
+    
+    %% ==================== OPCIÓN 6: SALIR ====================
+    UserInput1 -->|"6"| ScreenExit["Ve PANTALLA:<br/>👋 HASTA PRONTO<br/><br/>Gracias por usar<br/>Biblioteca Ciutat Vella<br/>Vuelve pronto<br/><br/>Presiona Enter para cerrar"]
+    
+    ScreenExit --> UserPressEnter[Usuario presiona Enter]
+    UserPressEnter --> End([Aplicación<br/>se cierra])
+    
+    %% ESTILOS
+    classDef userAction fill:#4CAF50,stroke:#2E7D32,stroke-width:3px,color:#fff
+    classDef screenShow fill:#2196F3,stroke:#1565C0,stroke-width:3px,color:#fff
+    classDef decision fill:#FF9800,stroke:#E65100,stroke-width:3px,color:#fff
+    classDef startEnd fill:#9C27B0,stroke:#6A1B9A,stroke-width:3px,color:#fff
+    
+    class AddStep1,AddStep2,AddStep3,AddStep4,AddStep5,TypeTitle,TypeAuthor,TypeGenre,UserTypeID,UserTypeEditID,UserTypeEditTitle,UserEditTitle,UserEditAuthor,UserEditDesc,UserEditISBN,UserEditGenre,UserTypeDeleteID,UserTypeDeleteTitle,UserPressEnter userAction
+    
+    class Welcome,MainMenu,Screen1,SubMenu1,SearchMenu,ScreenFound,ScreenNotFound,SubMenuFound,SubMenuNotFound,SearchTitle,SearchAuthor,SearchGenre,ScreenGenre,SubMenuGenre,TypeID,AddMenu,Screen2,Screen3,Screen4,Screen5,ScreenResume,ScreenSuccess,SubMenuSuccess,EditMenu,EditSearchID,EditSearchTitle,ScreenEditBook,EditFieldMenu,EditTitle,EditAuthor,EditDesc,EditISBN,EditGenre,ScreenEditSuccess,SubMenuEditSuccess,DeleteMenu,DeleteSearchID,DeleteSearchTitle,ScreenDeleteBook,DeleteConfirm,ScreenDeleteSuccess,SubMenuDeleteSuccess,ScreenExit screenShow
+    
+    class UserInput1,UserInput1_1,UserInput2,ResultTitle,ResultAuthor,ResultGenre,UserInputFound,UserInputNotFound,UserInputGenre,UserInputConfirm,UserInputSuccess,UserInputEdit,UserInputField,UserInputEditSuccess,UserInputDelete,UserInputDeleteConfirm,UserInputDelSuccess decision
+    
+    class Start,End startEnd
