@@ -70,7 +70,7 @@ public class BookView {
     }
 
     private void showMainMenu(boolean hasSeenInventory, boolean hasInteracted) {
-        String questionMenu = (!hasInteracted) ? Colors.BOLD + Colors.PURPLE +"¿Qué quieres hacer hoy?" : "¿Qué quieres hacer ahora?" + Colors.RESET;
+        String questionMenu = (!hasInteracted) ? Colors.BOLD + Colors.PURPLE +"¿Qué quieres hacer hoy?" : Colors.BOLD + Colors.PURPLE + "¿Qué quieres hacer ahora?" + Colors.RESET;
         System.out.println(Colors.BOLD + "\n" + questionMenu + "\n" + Colors.RESET);
 
         if (!hasSeenInventory) {
@@ -113,11 +113,11 @@ public class BookView {
 
         while (!backToMainMenu) {
             System.out.println(Colors.BOLD + Colors.CYAN + "\n🔍 BUSCAR LIBRO\n" + Colors.RESET);
-            System.out.println("¿Cómo quieres buscar?");
-            System.out.println("[1] Por título");
-            System.out.println("[2] Por autor");
-            System.out.println("[3] Por género");
-            System.out.println("[4] Volver al menú principal");
+            System.out.println(Colors.BOLD + Colors.PURPLE + "\n¿Cómo quieres buscar?");
+            System.out.println(Colors.BOLD + Colors.PURPLE +"[1]" + Colors.RESET + " Por título");
+            System.out.println(Colors.BOLD + Colors.PURPLE +"[2]" + Colors.RESET + " Por autor");
+            System.out.println(Colors.BOLD + Colors.PURPLE +"[3]" + Colors.RESET + " Por género");
+            System.out.println(Colors.BOLD + Colors.PURPLE +"[4]" + Colors.RESET + " Volver al menú principal");
             System.out.print("\n➤ Introduce tu opción (1-4): ");
 
             int inputSubMenu = chosenOption();
@@ -214,7 +214,7 @@ public class BookView {
             System.out.println(Colors.YELLOW + "\n⚠️  No hay libros para mostrar.\n" + Colors.RESET);
             return;
         }
-        System.out.println(Colors.BOLD + String.format("%-3s | %-32.32s | %-20.20s | %-12.12s | %-13s",
+        System.out.println(Colors.BOLD + Colors.CYAN + String.format("%-3s | %-32.32s | %-20.20s | %-12.12s | %-13s",
                 "ID", "TÍTULO", "AUTOR/ES", "GÉNERO/S", "ISBN") + Colors.RESET);
         System.out.println(Colors.BOLD + Colors.CYAN +"--------------------------------------------------------------------------------------------------" + Colors.RESET);
         for (Libro libro : libros) {
@@ -240,14 +240,14 @@ public class BookView {
 
     private void printBookDetails(Libro libro) {
         System.out.println(Colors.BOLD + Colors.CYAN + "\n--------------------------------------------------------------------------------------------------\n" + Colors.RESET);
-        System.out.println(Colors.BOLD + "TÍTULO:      " + Colors.RESET + Colors.YELLOW + libro.getTitulo() + Colors.RESET);
+        System.out.println(Colors.BOLD + Colors.CYAN + "TÍTULO:      " + Colors.RESET + Colors.YELLOW + libro.getTitulo() + Colors.RESET);
         String autores = "";
         for (Autor a : libro.getAutores()) {
             autores += a.getNombre() + ", ";
         }
         if (autores.endsWith(", "))
             autores = autores.substring(0, autores.length() - 2);
-        System.out.println(Colors.BOLD + "AUTOR/ES:    " + Colors.RESET + autores);
+        System.out.println(Colors.BOLD+ Colors.CYAN + "AUTOR/ES:    " + Colors.RESET + autores);
         String generos = "";
         for (Genero g : libro.getGeneros()) {
             generos += g.name() + " ";
