@@ -70,17 +70,17 @@ public class BookView {
     }
 
     private void showMainMenu(boolean hasSeenInventory, boolean hasInteracted) {
-        String questionMenu = (!hasInteracted) ? "¿Qué quieres hacer hoy?" : "¿Qué quieres hacer ahora?";
+        String questionMenu = (!hasInteracted) ? Colors.BOLD + Colors.PURPLE +"¿Qué quieres hacer hoy?" : "¿Qué quieres hacer ahora?" + Colors.RESET;
         System.out.println(Colors.BOLD + "\n" + questionMenu + "\n" + Colors.RESET);
 
         if (!hasSeenInventory) {
-            System.out.println("[1] 📖 Ver todo el inventario");
+            System.out.println(Colors.BOLD + Colors.PURPLE + "[1]" + Colors.RESET + " 📖 Ver todo el inventario");
         }
-        System.out.println("[2] 🔍 Buscar un libro");
-        System.out.println("[3] ➕ Añadir un nuevo libro");
-        System.out.println("[4] ✏️  Editar un libro");
-        System.out.println("[5] 🗑️  Eliminar un libro");
-        System.out.println("[6] 🚪 Salir");
+        System.out.println(Colors.BOLD + Colors.PURPLE +"[2]" + Colors.RESET + "  🔍 Buscar un libro");
+        System.out.println(Colors.BOLD + Colors.PURPLE +"[3]" + Colors.RESET + " ➕ Añadir un nuevo libro");
+        System.out.println(Colors.BOLD + Colors.PURPLE +"[4]" + Colors.RESET + " ✏️  Editar un libro");
+        System.out.println(Colors.BOLD + Colors.PURPLE +"[5]" + Colors.RESET + " 🗑️  Eliminar un libro");
+        System.out.println(Colors.BOLD + Colors.PURPLE +"[6]" + Colors.RESET + " 🚪 Salir");
         System.out.print("\n➤ Introduce tu opción (1-6): ");
     }
 
@@ -216,8 +216,7 @@ public class BookView {
         }
         System.out.println(Colors.BOLD + String.format("%-3s | %-32.32s | %-20.20s | %-12.12s | %-13s",
                 "ID", "TÍTULO", "AUTOR/ES", "GÉNERO/S", "ISBN") + Colors.RESET);
-        System.out.println(
-                "--------------------------------------------------------------------------------------------------");
+        System.out.println(Colors.BOLD + Colors.CYAN +"--------------------------------------------------------------------------------------------------" + Colors.RESET);
         for (Libro libro : libros) {
             String nombresAutores = "";
             for (Autor autor : libro.getAutores()) {
@@ -236,12 +235,11 @@ public class BookView {
                     generos,
                     libro.getIsbn());
         }
-        System.out.println(
-                "--------------------------------------------------------------------------------------------------");
+        System.out.println(Colors.BOLD + Colors.CYAN +"--------------------------------------------------------------------------------------------------" + Colors.RESET);
     }
 
     private void printBookDetails(Libro libro) {
-        System.out.println(Colors.CYAN + "\n--------------------------------------------------------------------------------------------------\n" + Colors.RESET);
+        System.out.println(Colors.BOLD + Colors.CYAN + "\n--------------------------------------------------------------------------------------------------\n" + Colors.RESET);
         System.out.println(Colors.BOLD + "TÍTULO:      " + Colors.RESET + Colors.YELLOW + libro.getTitulo() + Colors.RESET);
         String autores = "";
         for (Autor a : libro.getAutores()) {
@@ -254,9 +252,9 @@ public class BookView {
         for (Genero g : libro.getGeneros()) {
             generos += g.name() + " ";
         }
-        System.out.println(Colors.BOLD + "GÉNERO/S:    " + Colors.RESET + generos);
-        System.out.println(Colors.BOLD + "ISBN:        " + Colors.RESET + libro.getIsbn());
-        System.out.println(Colors.BOLD + "DESCRIPCIÓN: " + Colors.RESET + libro.getDescripcion() + Colors.RESET);
-        System.out.println(Colors.CYAN + "\n--------------------------------------------------------------------------------------------------\n\n" + Colors.RESET);
+        System.out.println(Colors.BOLD + Colors.CYAN + "GÉNERO/S:    " + Colors.RESET + generos);
+        System.out.println(Colors.BOLD + Colors.CYAN +  "ISBN:        " + Colors.RESET + libro.getIsbn());
+        System.out.println(Colors.BOLD + Colors.CYAN + "DESCRIPCIÓN: " + Colors.RESET + libro.getDescripcion() + Colors.RESET);
+        System.out.println(Colors.CYAN + Colors.CYAN + "\n--------------------------------------------------------------------------------------------------\n\n" + Colors.RESET);
     }
 }
