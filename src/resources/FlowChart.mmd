@@ -1,0 +1,67 @@
+---
+id: da3d3eea-dd46-4e1d-89b5-b9c7beaf941a
+---
+flowchart TB
+    subgraph Usuario
+        U[👤 Usuario Terminal]
+    end
+    
+    subgraph ViewLayer["📺 CAPA VIEW"]
+        App[App.java<br/>main]
+        BookView[BookView.java<br/>Scanner / System.out]
+    end
+    
+    subgraph ControllerLayer["🎮 CAPA CONTROLLER"]
+        LibroController[LibroController.java<br/>Lógica de negocio]
+    end
+    
+    subgraph RepositoryLayer["💾 CAPA REPOSITORY"]
+        LibroRepo[LibroRepository<br/>interface]
+        LibroRepoImp[LibroRepositoryImp<br/>implementación]
+        AutorRepo[AutorRepository<br/>interface]
+        AutorRepoImp[AutorRepositoryImp<br/>implementación]
+    end
+    
+    subgraph ModelLayer["📦 CAPA MODEL"]
+        Libro[Libro.java]
+        Autor[Autor.java]
+        Genero[Genero.java]
+        Colors[Colors.java]
+    end
+    
+    subgraph DatabaseLayer["🗄️ BASE DE DATOS"]
+        DB[(PostgreSQL<br/>biblioteca_db)]
+        TLibros[tabla: libros]
+        TAutores[tabla: autores]
+        TGeneros[tabla: generos]
+    end
+    
+    U <-->|Entrada/Salida| BookView
+    App -->|inicia| BookView
+    BookView -->|llama métodos| LibroController
+    LibroController -->|usa| LibroRepo
+    LibroController -->|usa| AutorRepo
+    LibroRepo -.implementa.- LibroRepoImp
+    AutorRepo -.implementa.- AutorRepoImp
+    LibroRepoImp -->|SQL queries| DB
+    AutorRepoImp -->|SQL queries| DB
+    LibroController -->|manipula| Libro
+    LibroController -->|manipula| Autor
+    LibroController -->|manipula| Genero
+    Libro -->|contiene| Autor
+    Libro -->|contiene| Genero
+    DB --- TLibros
+    DB --- TAutores
+    DB --- TGeneros
+    
+    classDef viewStyle fill:#4CAF50,stroke:#2E7D32,stroke-width:3px,color:#fff
+    classDef controllerStyle fill:#FF9800,stroke:#E65100,stroke-width:3px,color:#fff
+    classDef repoStyle fill:#2196F3,stroke:#1565C0,stroke-width:3px,color:#fff
+    classDef modelStyle fill:#00BCD4,stroke:#006064,stroke-width:3px,color:#fff
+    classDef dbStyle fill:#9C27B0,stroke:#6A1B9A,stroke-width:3px,color:#fff
+    
+    class App,BookView viewStyle
+    class LibroController controllerStyle
+    class LibroRepo,LibroRepoImp,AutorRepo,AutorRepoImp repoStyle
+    class Libro,Autor,Genero,Colors modelStyle
+    class DB,TLibros,TAutores,TGeneros dbStyle

@@ -3,6 +3,7 @@ package com.biblioteca.view;
 import com.biblioteca.controller.LibroController;
 import com.biblioteca.model.Autor;
 import com.biblioteca.model.Colors;
+import com.biblioteca.model.Genero;
 import com.biblioteca.model.Libro;
 import java.util.List;
 import java.util.Scanner;
@@ -27,7 +28,6 @@ public class BookView {
         while (keepGoing) {
             showMainMenu(hasSeenInventory, hasInteracted);
             int inputMenu = chosenOption();
-
             switch (inputMenu) {
                 case 1:
                     showAllBooks();
@@ -36,19 +36,23 @@ public class BookView {
                     break;
                 case 2:
                     searchBook();
+                    hasSeenInventory = false;
                     hasInteracted = true;
                     break;
                 case 3:
                     System.out.println(Colors.YELLOW + "\n⚠️  Función 'Añadir' aún no implementada.\n" + Colors.RESET);
+                    hasSeenInventory = false;
                     hasInteracted = true;
                     break;
                 case 4:
                     System.out.println(Colors.YELLOW + "\n⚠️  Función 'Editar' aún no implementada.\n" + Colors.RESET);
+                    hasSeenInventory = false;
                     hasInteracted = true;
                     break;
                 case 5:
                     System.out
                             .println(Colors.YELLOW + "\n⚠️  Función 'Eliminar' aún no implementada.\n" + Colors.RESET);
+                    hasSeenInventory = false;
                     hasInteracted = true;
                     break;
                 case 6: {
@@ -56,10 +60,6 @@ public class BookView {
                     goodbyeMessage();
                     break;
                 }
-                default:
-                    System.out.println(
-                            Colors.RED + "\n❌ Opción inválida. Introduce un número del 1 al 6.\n" + Colors.RESET);
-                    break;
             }
         }
     }
@@ -102,37 +102,11 @@ public class BookView {
     private void showAllBooks() {
         System.out.println(Colors.BOLD + Colors.CYAN + "\n📖      INVENTARIO COMPLETO - BIBLIOTECA CIUTAT VELLA \n"
                 + Colors.RESET);
-        System.out.println(Colors.BOLD + String.format("%-3s | %-32.32s | %-20.20s | %-12.12s | %-13s",
-                "ID", "TÍTULO", "AUTOR/ES", "GÉNERO/S", "ISBN") + Colors.RESET);
-        System.out
-                .println(
-                        "--------------------------------------------------------------------------------------------------");
-
         List<Libro> inventario = controller.selectAllLibro();
-
-        for (Libro libro : inventario) {
-            String nombresAutores = "";
-            for (Autor autor : libro.getAutores()) {
-                nombresAutores += autor.getNombre() + ", ";
-            }
-            if (nombresAutores.endsWith(", "))
-                nombresAutores = nombresAutores.substring(0, nombresAutores.length() - 2);
-            String generos = "";
-            for (com.biblioteca.model.Genero g : libro.getGeneros()) {
-                generos += g.name() + " ";
-            }
-            System.out.printf("%-3d | %-32.32s | %-20.20s | %-12.12s | %-13s %n",
-                    libro.getId_libro(),
-                    libro.getTitulo(),
-                    nombresAutores,
-                    generos,
-                    libro.getIsbn());
-        }
-        System.out
-                .println(
-                        "--------------------------------------------------------------------------------------------------");
+        printTable(inventario);
         System.out.println(Colors.GREEN + "\n✅ Total de libros: " + inventario.size() + Colors.RESET);
     }
+
 
     private void searchBook() {
         boolean backToMainMenu = false;
@@ -150,13 +124,13 @@ public class BookView {
 
             switch (inputSubMenu) {
                 case 1:
-                    System.out.println("searchByTitle()");
+                    searchByTitle();
                     break;
                 case 2:
-                    System.out.println("searchByAuthor()");
+                    searchByAuthor();
                     break;
                 case 3:
-                    System.out.println("searchByGenre()");
+                    searchByGenre();
                     break;
                 case 4:
                     backToMainMenu = true;
@@ -168,30 +142,121 @@ public class BookView {
         }
     }
 
-    private void searchByTitle(){
-        System.out.println("Introduce el titulo");
-        String title = scanner.nextLine().trim();
-    
-        while(title.isEmpty()){
-            System.out.println(Colors.RED + "\n❌ El titulo no puede estar vacio.\n" + Colors.RESET);
-                System.out.println("Introduce el titulo");
-                title = scanner.nextLine().trim(); 
+    private void searchByTitle() {
+        String inputTitle = "";
+        while (inputTitle.isEmpty()) {
+            System.out.println("Introduce el titulo: ");
+            inputTitle = scanner.nextLine().trim();
+            if (inputTitle.isEmpty()) {
+                System.out.println(Colors.RED + "\n❌ El titulo no puede estar vacio.\n" + Colors.RESET);
+            }
+        }
+        List<Libro> libros = controller.selectLibroByTitle(inputTitle);
+        if (libros.isEmpty()) {
+            System.out.println(Colors.YELLOW + "\n⚠️ No se encontro ningun libro .\n" +
+                    Colors.RESET);
+        } else {
+            System.out.println(Colors.GREEN + "\n✅ Total de libros encontrados: " + libros.size() + Colors.RESET);
+            for (Libro l : libros) {
+                printBookDetails(l);
+            }
+        }
+    }
 
-                List<Libro> libros = controller.selectLibroByTitle(title);
+    private void searchByAuthor() {
+        String inputAuthor = "";
+        while (inputAuthor.isEmpty()) {
+            System.out.println("Introduce el autor: ");
+            inputAuthor = scanner.nextLine().trim();
+            if (inputAuthor.isEmpty()) {
+                System.out.println(Colors.RED + "\n❌ El autor no puede estar vacio.\n" + Colors.RESET);
+            }
+        }
+        List<Libro> libros = controller.selectLibroByAuthor(inputAuthor);
+        if (libros.isEmpty()) {
+            System.out.println(Colors.YELLOW + "\n⚠️ No se encontro ningun libro de este autor .\n" +
+                    Colors.RESET);
+        } else {
+            System.out.println(Colors.GREEN + "\n✅ Total de libros encontrados: " + libros.size() + Colors.RESET);
+            for (Libro l : libros) {
+                printBookDetails(l);
+            }
+        }
+    }
 
-                if(libros.isEmpty()) {
-                System.out.println(Colors.YELLOW + "\n⚠️  No se encontro ningun libro .\n" + Colors.RESET);
-                }  else {
-                System.out.println(Colors.GREEN + "\n✅ Se han encontrado  " + libros + Colors.RESET);
-                }
-  
-              // añadir metodo externo que se encarga de visualizar la pllantilla de cada libro.
-  
+    private void searchByGenre() {
+        String inputGenre = "";
+        Genero genreMatch = null;
+        while (genreMatch == null) {
+            System.out.println("\nGéneros disponibles:");
+            for (Genero g : Genero.values()) {
+                System.out.print("[" + g.getGeneroDb() + "] ");
+            }
+            System.out.println("\nIntroduce un genero: ");
+            inputGenre = scanner.nextLine().trim();
+            genreMatch = Genero.findGenero(inputGenre);
+            if (genreMatch == null) {
+                System.out.println(
+                        Colors.RED + "\n❌ Genero no reconocido. Por favor, elige uno de la lista.\n" + Colors.RESET);
+            }
+        }
+        List<Libro> libros = controller.selectLibroByGenre(genreMatch);
+        if (libros.isEmpty()) {
+        System.out.println(Colors.YELLOW + "\n⚠️ No se encontraron libros de este género.\n" + Colors.RESET);
+    } else {
+        System.out.println(Colors.GREEN + "\n✅ Total de libros encontrados: " + libros.size() + Colors.RESET);
+        printTable(libros);
+    }
+    }
 
-        
-        // crear el metodo para printar el json.
+    private void printTable(List<Libro> libros) {
+        if (libros.isEmpty()) {
+            System.out.println(Colors.YELLOW + "\n⚠️  No hay libros para mostrar.\n" + Colors.RESET);
+            return;
+        }
+        System.out.println(Colors.BOLD + String.format("%-3s | %-32.32s | %-20.20s | %-12.12s | %-13s",
+                "ID", "TÍTULO", "AUTOR/ES", "GÉNERO/S", "ISBN") + Colors.RESET);
+        System.out.println(
+                "--------------------------------------------------------------------------------------------------");
+        for (Libro libro : libros) {
+            String nombresAutores = "";
+            for (Autor autor : libro.getAutores()) {
+                nombresAutores += autor.getNombre() + ", ";
+            }
+            if (nombresAutores.endsWith(", "))
+                nombresAutores = nombresAutores.substring(0, nombresAutores.length() - 2);
+            String generos = "";
+            for (Genero g : libro.getGeneros()) {
+                generos += g.name() + " ";
+            }
+            System.out.printf("%-3d | %-32.32s | %-20.20s | %-12.12s | %-13s %n",
+                    libro.getId_libro(),
+                    libro.getTitulo(),
+                    nombresAutores,
+                    generos,
+                    libro.getIsbn());
+        }
+        System.out.println(
+                "--------------------------------------------------------------------------------------------------");
+    }
 
-      
-
-  }
+    private void printBookDetails(Libro libro) {
+        System.out.println(Colors.CYAN + "\n----------------------------------------------------\n" + Colors.RESET);
+        System.out.println(Colors.BOLD + "TÍTULO:      " + Colors.RESET + Colors.YELLOW + libro.getTitulo() + Colors.RESET);
+        String autores = "";
+        for (Autor a : libro.getAutores()) {
+            autores += a.getNombre() + ", ";
+        }
+        if (autores.endsWith(", "))
+            autores = autores.substring(0, autores.length() - 2);
+        System.out.println(Colors.BOLD + "AUTOR/ES:    " + Colors.RESET + autores);
+        String generos = "";
+        for (Genero g : libro.getGeneros()) {
+            generos += g.name() + " ";
+        }
+        System.out.println(Colors.BOLD + "GÉNERO/S:    " + Colors.RESET + generos);
+        System.out.println(Colors.BOLD + "ISBN:        " + Colors.RESET + libro.getIsbn());
+        System.out.println(Colors.BOLD + "DESCRIPCIÓN: " + Colors.RESET + libro.getDescripcion() + Colors.RESET);
+        System.out.println(Colors.CYAN + "\n----------------------------------------------------\n\n" + Colors.RESET);
+    }
 }
