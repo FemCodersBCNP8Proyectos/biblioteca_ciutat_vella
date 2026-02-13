@@ -56,14 +56,14 @@ public class LibroRepositoryImp implements LibroRepository {
     public List<Libro> selectAllLibro() {
         List<Libro> inventarioLibros = new ArrayList<>();
         String sql = """
-                SELECT l.id_libro, l.titulo, l.isbn,
+                SELECT l.id_libro, l.titulo, l.descripcion, l.isbn,
                 STRING_AGG(DISTINCT a.nombre, ', ') AS autores,
                 STRING_AGG(DISTINCT lg.genero::text, ', ') AS generos
                 FROM libros l
                 JOIN autor_libro al ON l.id_libro = al.libro_id
                 JOIN autores a ON al.autor_id = a.id_autor
                 JOIN libro_generos lg ON l.id_libro = lg.libro_id
-                GROUP BY l.id_libro, l.titulo, l.isbn
+                GROUP BY l.id_libro, l.titulo, l.descripcion, l.isbn
                 ORDER BY l.titulo ASC""";
 
         try (Connection conn = DBManager.getConnection();
